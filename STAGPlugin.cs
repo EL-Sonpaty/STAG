@@ -68,12 +68,10 @@ namespace STAG
         // listen to object transformation events
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
+            // Reset the last transformation and inverse transformation
             LastTransformation = Rhino.Geometry.Transform.Unset;
             LastInverseTransformation = Rhino.Geometry.Transform.Unset;
             RevertTransformObjects.Clear();
-
-            // Handle the transform event
-            RhinoApp.WriteLine($"Transform event: {e.Objects.Length} objects transformed");
 
             // Access the objects being transformed
             RhinoObject[] objects = e.Objects;
@@ -85,7 +83,6 @@ namespace STAG
             // You can also access object IDs
             foreach (var obj in e.Objects)
             {
-                RhinoApp.WriteLine($"Object ID: {obj.Id}");
                 // check permission
                 bool permission = false;
                 // block or let go
@@ -107,15 +104,16 @@ namespace STAG
 
         public void onAfterTransformObjects(object sender, RhinoAfterTransformObjectsEventArgs e)
         {
-
-            foreach (var obj in RevertTransformObjects)
+            if (RevertTransformObjects != null && RevertTransformObjects.Count > 0)
             {
-                // unblock object
-                //UnblockObject(obj);
-                RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
-
+                foreach (var obj in RevertTransformObjects)
+                {
+                    // unblock object
+                    //UnblockObject(obj);
+                    RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
+                }
+                RhinoApp.WriteLine($"Blocked tranformation for {RevertTransformObjects.Count} objects.");
             }
-
         }
 
         // listen to attribute modification events
