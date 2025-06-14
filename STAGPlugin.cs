@@ -1,5 +1,7 @@
 ﻿using System;
 using Rhino;
+using Rhino.DocObjects;
+using Rhino.PlugIns;
 
 namespace STAG
 {
@@ -24,5 +26,29 @@ namespace STAG
         // You can override methods here to change the plug-in behavior on
         // loading and shut down, add options pages to the Rhino _Option command
         // and maintain plug-in wide options in a document.
+
+        protected override Rhino.PlugIns.LoadReturnCode OnLoad(ref string errorMessage)
+        {
+            // Subscribe to the transform objects event
+            RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
+            
+            return LoadReturnCode.Success;
+
+        }
+
+        private void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
+        {
+            // Handle the transform event
+            RhinoApp.WriteLine($"Transform event: {e.Objects.Length} objects transformed");
+
+            // Access the objects being transformed
+            RhinoObject[] objects = e.Objects;
+
+            // You can also access object IDs
+            foreach (var obj in e.Objects)
+            {
+                RhinoApp.WriteLine($"Object ID: {obj.Id}");
+            }
+        }
     }
 }
