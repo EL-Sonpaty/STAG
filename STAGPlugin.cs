@@ -26,6 +26,8 @@ namespace STAG
         public STAGPlugin()
         {
             Instance = this;
+
+            // initialize transformation object list and matrices.
             RevertTransformObjects = new List<RhinoObject>();
             LastTransformation = Rhino.Geometry.Transform.Unset;
             LastInverseTransformation = Rhino.Geometry.Transform.Unset;
@@ -44,6 +46,8 @@ namespace STAG
             RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
             RhinoDoc.AfterTransformObjects += onAfterTransformObjects;
 
+            RhinoDoc.ReplaceRhinoObject += onReplaceRhinoObject;
+
             RhinoDoc.ModifyObjectAttributes += OnBeforeModifyAttributes;
 
             RhinoDoc.UserStringChanged += OnBeforeModifyUserStrings;
@@ -57,6 +61,11 @@ namespace STAG
             // Unsubscribe from events to prevent memory leaks
             RhinoDoc.BeforeTransformObjects -= OnBeforeTransformObjects;
             base.OnShutdown();
+        }
+
+        public bool CheckPermission(RhinoObject obj)
+        {
+            return false;
         }
 
 
@@ -84,7 +93,7 @@ namespace STAG
             foreach (var obj in e.Objects)
             {
                 // check permission
-                bool permission = false;
+                bool permission = CheckPermission(obj);
                 // block or let go
                 if (permission == false)
                 {
@@ -113,6 +122,29 @@ namespace STAG
             }
         }
 
+        public void onReplaceRhinoObject(object sender, RhinoReplaceObjectEventArgs e)
+        {
+            // Access the object being replaced
+            RhinoObject oldObj = e.OldRhinoObject;
+            RhinoObject newObj = e.NewRhinoObject;
+
+            if (oldObj != null && newObj != null)
+            {
+                // check permission
+                RhinoObject obj = RhinoDoc.ActiveDoc.Objects.Find(e.ObjectId);
+                bool permission = CheckPermission(obj);
+
+                // block or let go
+                if (permission == false)
+                {
+                    obj = e.OldRhinoObject;
+                    obj.CommitChanges();
+                    RhinoApp.WriteLine($"Blocked replacement for ID: {oldObj.Id}");
+                }
+                
+            }
+        }
+
         // listen to attribute modification events
         private void OnBeforeModifyAttributes(object sender, RhinoModifyObjectAttributesEventArgs e)
         {
@@ -127,7 +159,7 @@ namespace STAG
                 var newAtt = e.NewAttributes;
 
                 // check permission
-                bool permission = false;
+                bool permission = CheckPermission(obj);
 
                 // block or let go
                 if (permission == false)
