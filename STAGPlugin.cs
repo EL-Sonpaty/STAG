@@ -1,8 +1,9 @@
-﻿using System;
-using Rhino;
+﻿using Rhino;
 using Rhino.DocObjects;
 using Rhino.PlugIns;
-
+using Rhino.UI;
+using STAG.Wrappers;
+using System;
 namespace STAG
 {
     ///<summary>
@@ -17,6 +18,20 @@ namespace STAG
     {
         public STAGPlugin()
         {
+            // Register the panel (only needs to be done once)
+            Panels.RegisterPanel(
+                this,
+                typeof(STAGViewHost),
+                "STAGPanel",
+                System.Drawing.SystemIcons.WinLogo,
+                PanelType.System
+            );
+
+            // Show the panel on startup
+            Panels.OpenPanel(typeof(STAGViewHost).GUID);
+
+
+
             Instance = this;
         }
 
@@ -31,7 +46,7 @@ namespace STAG
         {
             // Subscribe to the transform objects event
             RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
-            
+
             return LoadReturnCode.Success;
 
         }

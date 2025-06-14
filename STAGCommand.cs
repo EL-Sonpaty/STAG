@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Rhino;
+﻿using Rhino;
 using Rhino.Commands;
 using Rhino.Geometry;
 using Rhino.Input;
 using Rhino.Input.Custom;
+using Rhino.UI;
+using STAG.Wrappers;
+using System;
+using System.Collections.Generic;
 
 namespace STAG
 {
     public class STAGCommand : Command
     {
-        public STAGCommand()
-        {
-            // Rhino only creates one instance of each command class defined in a
-            // plug-in, so it is safe to store a refence in a static property.
-            Instance = this;
-        }
-
         ///<summary>The only instance of this command.</summary>
         public static STAGCommand Instance { get; private set; }
 
