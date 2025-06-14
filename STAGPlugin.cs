@@ -88,7 +88,6 @@ namespace STAG
                 // block or let go
                 if (permission == false)
                 {
-                    //BlockObject(obj);
                     if (RevertTransformObjects.Contains(obj) == false)
                     {
                         RevertTransformObjects.Add(obj);
@@ -108,8 +107,6 @@ namespace STAG
             {
                 foreach (var obj in RevertTransformObjects)
                 {
-                    // unblock object
-                    //UnblockObject(obj);
                     RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
                 }
                 RhinoApp.WriteLine($"Blocked tranformation for {RevertTransformObjects.Count} objects.");
@@ -151,35 +148,5 @@ namespace STAG
             RhinoApp.WriteLine($"Changing user string");
         }
 
-        public void BlockObject(RhinoObject obj)
-        {
-            // check if the object was locked before, if locked, we don't need to handle it.
-            if (obj.IsLocked)
-            {
-                return;
-            }
-            // Set user string to lock the object
-            obj.Attributes.SetUserString(LOCKED_BY_STAG_KEY, LOCKED_BY_STAG_VALUE);
-            RhinoDoc.ActiveDoc.Objects.Lock(obj.Id, true);
-            RhinoDoc.ActiveDoc.Objects.ModifyAttributes(obj, obj.Attributes, true);
-        }
-
-        public void UnblockObject(RhinoObject obj)
-        {
-            // check if the object was locked before
-            if (!obj.IsLocked)
-            {
-                return;
-            }
-            // was it blocked by us ? 
-            var userString = obj.Attributes.GetUserString(LOCKED_BY_STAG_KEY);
-            if (userString != null && userString != string.Empty)
-            {
-                // Remove user string to unlock the object
-                obj.Attributes.SetUserString(LOCKED_BY_STAG_KEY, null);
-                RhinoDoc.ActiveDoc.Objects.Lock(obj.Id, false);
-                RhinoDoc.ActiveDoc.Objects.ModifyAttributes(obj, obj.Attributes, true);
-            }
-        }
     }
 }
