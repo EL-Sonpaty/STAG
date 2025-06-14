@@ -39,18 +39,18 @@
                                 </Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <CheckBox  IsChecked="{Binding IsGeometricalEditable}" >
+                                <ToggleButton IsChecked="{Binding IsGeometricalEditable}" >
                                     <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
-                                </CheckBox>
-                                <CheckBox  IsChecked="{Binding IsTranslationEditable}" >
+                                </ToggleButton>
+                                <ToggleButton  IsChecked="{Binding IsTranslationEditable}" >
                                     <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
-                                </CheckBox>
-                                <CheckBox  IsChecked="{Binding IsAttributesEditable}" >
+                                </ToggleButton>
+                                <ToggleButton IsChecked="{Binding IsAttributesEditable}" >
                                     <fas:IconBlock Icon="Tags" Foreground="Black" Width="16" Height="16"/>
-                                </CheckBox>
-                                <CheckBox  IsChecked="{Binding IsUserTextsEditable}" >
+                                </ToggleButton>
+                                <ToggleButton  IsChecked="{Binding IsUserTextsEditable}" >
                                     <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16"/>
-                                </CheckBox>
+                                </ToggleButton>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
