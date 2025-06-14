@@ -24,14 +24,22 @@
   
   <ItemGroup>
     <PackageReference Include="RhinoCommon" Version="8.19.25132.1001" ExcludeAssets="runtime" />
+    <PackageReference Include="RhinoWindows" Version="8.19.25132.1001" />
   </ItemGroup>
   
   <ItemGroup>
     <Folder Include="Constants\" />
     <Folder Include="Enums\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>Binaries\System.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration">
+      <HintPath>Binaries\WindowsFormsIntegration.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <!-- For Windows only builds -->

@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STAG", "STAG.csproj", "{97EFA5FE-B66A-41E2-9643-8CAE3DCA8FC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\System.Windows.Forms.dll = Binaries\System.Windows.Forms.dll
+		Binaries\WindowsFormsIntegration.dll = Binaries\WindowsFormsIntegration.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

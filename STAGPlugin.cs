@@ -7,6 +7,9 @@ using Rhino.DocObjects;
 using Rhino.PlugIns;
 using static Rhino.RhinoDoc;
 
+using Rhino.UI;
+using STAG.Wrappers;
+using System;
 namespace STAG
 {
     ///<summary>
@@ -42,6 +45,20 @@ namespace STAG
 
         public STAGPlugin()
         {
+            // Register the panel (only needs to be done once)
+            Panels.RegisterPanel(
+                this,
+                typeof(STAGViewHost),
+                "STAGPanel",
+                System.Drawing.SystemIcons.WinLogo,
+                PanelType.System
+            );
+
+            // Show the panel on startup
+            Panels.OpenPanel(typeof(STAGViewHost).GUID);
+
+
+
             Instance = this;
 
             ListenToRhino = true;
