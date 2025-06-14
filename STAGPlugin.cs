@@ -36,6 +36,13 @@ namespace STAG
 
         }
 
+        protected override void OnShutdown()
+        {
+            // Unsubscribe from events to prevent memory leaks
+            RhinoDoc.BeforeTransformObjects -= OnBeforeTransformObjects;
+            base.OnShutdown();
+        }
+
         private void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
             // Handle the transform event
