@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace STAG.Models
 {
-    public class StageConstraints
+    public class StageConstraint
     {
-        public int Number { get; set; }
-        public string Text { get; set; }
+        public int Index { get; set; }
+        public string StageName { get; set; }
         public bool IsGeometricalEditable { get; set; }
         public bool IsTranslationEditable { get; set; }
         public bool IsAttributesEditable { get; set; }
