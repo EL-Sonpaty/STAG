@@ -1,29 +1,168 @@
-﻿using System;
+﻿using Rhino;
+using Rhino.DocObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace STAG
+
 {
+
     public class STAG_Core
+
     {
 
-        public void SetStage(Guid RhinoId, string NewStage)
+        private readonly RhinoDoc _doc;
+
+        private readonly List<string> _stageOrder = new List<string> { "Design", "Engineering", "Production", "Shipping" };
+
+        public STAG_Core(RhinoDoc doc)
+
         {
-            // do you thing here
+
+            _doc = doc;
+
         }
 
-        public void UpgradeObject(Guid RhinoId)
+        public void SetStage(List<Guid> rhinoIds, string newStage)
+
         {
-            // upgrade object from previous stage to next 
+
+            foreach (var id in rhinoIds)
+
+            {
+
+                var obj = _doc.Objects.FindId(id);
+
+                if (obj != null)
+
+                {
+
+                    obj.Attributes.SetUserString("Stage", newStage);
+
+                    obj.CommitChanges();
+
+                    RhinoApp.WriteLine($"Object {id} stage set to '{newStage}'.");
+
+                }
+
+                else
+
+                {
+
+                    RhinoApp.WriteLine("Object not found.");
+
+                    return;
+
+                }
+
+            }
+
+            _doc.Views.Redraw();
+
         }
 
-        public void DowngradeObject(Guid RhinoId)
+        public void UpgradeObject(List<Guid> rhinoIds)
+
         {
-            // downgrade object from current stage to previous
+
+            foreach (var id in rhinoIds)
+
+            {
+
+                var obj = _doc.Objects.FindId(id);
+
+                if (obj == null)
+
+                {
+
+                    RhinoApp.WriteLine("Object not found.");
+
+                    return;
+
+                }
+
+                string currentStage = obj.Attributes.GetUserString("Stage");
+
+                int index = _stageOrder.IndexOf(currentStage);
+
+                if (index != -1 && index < _stageOrder.Count - 1)
+
+                {
+
+                    string nextStage = _stageOrder[index + 1];
+
+                    SetStage(new List<Guid> { id }, nextStage);
+
+                }
+
+                else
+
+                {
+
+                    RhinoApp.WriteLine($"Object {id} is already at highest stage or not recognized.");
+
+                    return;
+
+                }
+
+                _doc.Views.Redraw();
+
+            }
+
         }
 
+        public void DowngradeObject(List<Guid> rhinoIds)
+
+        {
+
+            foreach (var id in rhinoIds)
+
+            {
+
+                var obj = _doc.Objects.FindId(id);
+
+                if (obj == null)
+
+                {
+
+                    Console.WriteLine("Object is not found.");
+
+                    return;
+
+                }
+
+                string currentStage = obj.Attributes.GetUserString("Stage");
+
+                int index = _stageOrder.IndexOf(currentStage);
+
+                if (index > 0)
+
+                {
+
+                    string previousStage = _stageOrder[index - 1];
+
+                    SetStage(new List<Guid> { id }, previousStage);
+
+                }
+
+                else
+
+                {
+
+                    RhinoApp.WriteLine($"Object {id} is already at lowest stage or not recognized.");
+
+                    return;
+
+                }
+
+            }
+
+        }
 
     }
+
 }
+
