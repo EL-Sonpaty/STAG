@@ -24,6 +24,20 @@ namespace STAG
         public string LOCKED_BY_STAG_VALUE = "This object was locked by STAG plugin. It should have been unlocked by something went wrong, you can delete this usertext.";
 
         public Dictionary<Guid, bool> HasBeenProcessed = new Dictionary<Guid, bool>();
+
+        public enum ModificationType
+        {
+            Transform,
+            Replace,
+            ModifyAttributes,
+            ModifyUserStrings
+        }
+
+        public bool IsTransformAllowed => true;
+        public bool IsReplaceAllowed => true;
+        public bool IsModifyAttributesAllowed => true;
+        public bool IsModifyUserStringsAllowed => true;
+
         public STAGPlugin()
         {
             Instance = this;
@@ -95,6 +109,12 @@ namespace STAG
         // listen to object transformation events
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
+
+            // is replaced alowed 
+            if (IsTransformAllowed == false)
+            {
+                return; // Skip replacement if not allowed
+            }
             Rhino.RhinoApp.WriteLine("OnBeforeTransformObjects");
 
             // Reset the last transformation and inverse transformation
@@ -160,6 +180,12 @@ namespace STAG
 
         public void onReplaceRhinoObject(object sender, RhinoReplaceObjectEventArgs e)
         {
+            // is replaced alowed 
+            if (IsReplaceAllowed == false)
+            {
+                return; // Skip replacement if not allowed
+            }
+
             Rhino.RhinoApp.WriteLine("onReplaceRhinoObject");
             // Access the object being replaced
             RhinoObject oldObj = e.OldRhinoObject;
@@ -196,15 +222,13 @@ namespace STAG
                     obj.CommitChanges();
                     RhinoApp.WriteLine($"Blocked Operation for ID: {obj.Id}");
                 }
-
-
-
             }
         }
 
         // listen to attribute modification events
         private void OnBeforeModifyAttributes(object sender, RhinoModifyObjectAttributesEventArgs e)
         {
+            if (IsModifyAttributesAllowed == false) return;
             // Access the object being transformed
             RhinoObject obj = e.RhinoObject;
 
@@ -234,6 +258,8 @@ namespace STAG
 
         public void OnBeforeModifyUserStrings(object sender, UserStringChangedArgs e)
         {
+            if (IsModifyUserStringsAllowed == false) return;
+
             RhinoApp.WriteLine($"Changing user string");
         }
 
