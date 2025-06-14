@@ -1,4 +1,5 @@
 ﻿using Rhino;
+using STAG.Constants;
 using STAG.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,10 @@ namespace STAG.Views
     /// </summary>
     public partial class STAGView
     {
+
         public STAGView(uint documentSerialNumber)
         {
+            HardCodedData.DocumentSerialNumber = documentSerialNumber;
             DataContext = new STAGPanelViewModel(documentSerialNumber);
             InitializeComponent();
         }

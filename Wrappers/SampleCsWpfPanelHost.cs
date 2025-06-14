@@ -17,7 +17,7 @@ namespace STAG.Wrappers
     public class STAGViewHost : RhinoWindows.Controls.WpfElementHost
     {
         public STAGViewHost(uint docSn)
-          : base(new STAGView(docSn), null)
+        : base(new STAGView(docSn), null)
         {
         }
     }

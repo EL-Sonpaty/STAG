@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Policy;
-using Eto.Forms;
+﻿using Eto.Forms;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.PlugIns;
-using static Rhino.RhinoDoc;
-
 using Rhino.UI;
+using STAG.Constants;
+using STAG.Views;
 using STAG.Wrappers;
 using System;
+using System.Collections.Generic;
+using System.Security.Policy;
+using static Rhino.RhinoDoc;
+
+
 namespace STAG
 {
     ///<summary>
@@ -22,6 +24,7 @@ namespace STAG
     ///</summary>
     public class STAGPlugin : Rhino.PlugIns.PlugIn
     {
+        public override PlugInLoadTime LoadTime => PlugInLoadTime.AtStartup;
 
         public bool ListenToRhino = false;
 
@@ -45,20 +48,6 @@ namespace STAG
 
         public STAGPlugin()
         {
-            // Register the panel (only needs to be done once)
-            Panels.RegisterPanel(
-                this,
-                typeof(STAGViewHost),
-                "STAGPanel",
-                System.Drawing.SystemIcons.WinLogo,
-                PanelType.System
-            );
-
-            // Show the panel on startup
-            Panels.OpenPanel(typeof(STAGViewHost).GUID);
-
-
-
             Instance = this;
 
             ListenToRhino = true;
@@ -78,6 +67,19 @@ namespace STAG
 
         protected override Rhino.PlugIns.LoadReturnCode OnLoad(ref string errorMessage)
         {
+            // Register the panel (only needs to be done once)
+            Panels.RegisterPanel(
+                this,
+                typeof(STAGViewHost),
+                "STAGPanel",
+                System.Drawing.SystemIcons.WinLogo,
+                PanelType.System
+            );
+
+            // Show the panel on startup
+            //Panel T = Panels.GetPanel(typeof(STAGViewHost).GUID, HardCodedData.DocumentSerialNumber) as Panel;
+
+
             // Subscribe to the transform objects event
             RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
             RhinoDoc.ReplaceRhinoObject += onReplaceRhinoObject;
@@ -190,7 +192,7 @@ namespace STAG
             foreach (var obj in e.Objects)
             {
                 // Check if the object is already processed
-                if(HasBeenProcessed.ContainsKey(obj.Id) && HasBeenProcessed[obj.Id] == true)
+                if (HasBeenProcessed.ContainsKey(obj.Id) && HasBeenProcessed[obj.Id] == true)
                 {
                     continue; // Skip this object if it has been processed
                 }
@@ -199,12 +201,12 @@ namespace STAG
                 // block or let go
                 if (permission == false)
                 {
-                    
+
                     if (RevertTransformObjects.Contains(obj) == false)
                     {
                         RevertTransformObjects.Add(obj);
                         AddToProcessedPool(obj);
-        
+
                     }
                 }
                 else
@@ -274,7 +276,7 @@ namespace STAG
                 {
                     var oldGeom = oldObj.DuplicateGeometry();
 
-                    Rhino.RhinoDoc.ActiveDoc.Objects.Replace(obj.Id, oldGeom    , true);
+                    Rhino.RhinoDoc.ActiveDoc.Objects.Replace(obj.Id, oldGeom, true);
                     obj = e.OldRhinoObject;
                     obj.CommitChanges();
                     RhinoApp.WriteLine($"Blocked Operation for ID: {obj.Id}");
