@@ -20,6 +20,8 @@ namespace STAG
     public class STAGPlugin : Rhino.PlugIns.PlugIn
     {
 
+        public bool ListenToRhino = false;
+
         public string LOCKED_BY_STAG_KEY = "TempStagLocked";
         public string LOCKED_BY_STAG_VALUE = "This object was locked by STAG plugin. It should have been unlocked by something went wrong, you can delete this usertext.";
 
@@ -41,6 +43,8 @@ namespace STAG
         public STAGPlugin()
         {
             Instance = this;
+
+            ListenToRhino = true;
 
             // initialize transformation object list and matrices.
             RevertTransformObjects = new List<RhinoObject>();
@@ -70,10 +74,46 @@ namespace STAG
 
         }
 
+        public bool StartListening()
+        {
+            if (ListenToRhino == false)
+            {
+                ListenToRhino = true;
+                RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
+                RhinoDoc.ReplaceRhinoObject += onReplaceRhinoObject;
+                RhinoDoc.AfterTransformObjects += onAfterTransformObjects;
+
+                RhinoDoc.ModifyObjectAttributes += OnBeforeModifyAttributes;
+
+                RhinoDoc.UserStringChanged += OnBeforeModifyUserStrings;
+
+                return true;
+            }
+            return false;
+        }
+
+        public bool StopListening()
+        {
+            if (ListenToRhino == true)
+            {
+                ListenToRhino = false;
+                RhinoDoc.BeforeTransformObjects -= OnBeforeTransformObjects;
+                RhinoDoc.ReplaceRhinoObject -= onReplaceRhinoObject;
+                RhinoDoc.AfterTransformObjects -= onAfterTransformObjects;
+
+                RhinoDoc.ModifyObjectAttributes -= OnBeforeModifyAttributes;
+
+                RhinoDoc.UserStringChanged -= OnBeforeModifyUserStrings;
+
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnShutdown()
         {
             // Unsubscribe from events to prevent memory leaks
-            RhinoDoc.BeforeTransformObjects -= OnBeforeTransformObjects;
+            StopListening();
             base.OnShutdown();
         }
 
