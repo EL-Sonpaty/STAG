@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace STAG.ViewModels
 {
-    internal class STAGPanelViewModel : Rhino.UI.ViewModel
+    internal class STAGPanelViewModel : BaseViewModel
     {
         private uint DocumentRuntimeSerialNumber { get; }
-        private string m_message;
-        private string m_settings_changed_message;
-        private bool m_use_multiple_counters;
-
         public STAGPanelViewModel(uint documentSerialNumber)
         {
             DocumentRuntimeSerialNumber = documentSerialNumber;
@@ -23,5 +21,12 @@ namespace STAG.ViewModels
         {
             uint sn = e.DocumentSerialNumber;
         }
+
+        public string NewStageName { get; set; }
+
+
+        public ObservableCollection<Models.StageConstraint> StageConstraints { get; } = new ObservableCollection<Models.StageConstraint>();
+
+
     }
 }
