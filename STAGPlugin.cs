@@ -23,6 +23,7 @@ namespace STAG
         public string LOCKED_BY_STAG_KEY = "TempStagLocked";
         public string LOCKED_BY_STAG_VALUE = "This object was locked by STAG plugin. It should have been unlocked by something went wrong, you can delete this usertext.";
 
+        public Dictionary<Guid, bool> HasBeenProcessed = new Dictionary<Guid, bool>();
         public STAGPlugin()
         {
             Instance = this;
@@ -44,9 +45,8 @@ namespace STAG
         {
             // Subscribe to the transform objects event
             RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
-            RhinoDoc.AfterTransformObjects += onAfterTransformObjects;
-
             RhinoDoc.ReplaceRhinoObject += onReplaceRhinoObject;
+            RhinoDoc.AfterTransformObjects += onAfterTransformObjects;
 
             RhinoDoc.ModifyObjectAttributes += OnBeforeModifyAttributes;
 
@@ -68,6 +68,24 @@ namespace STAG
             return false;
         }
 
+        public void AddToProcessedPool(RhinoObject obj)
+        {
+            Guid id = obj.Id;
+            if (HasBeenProcessed.ContainsKey(id) == false)
+            {
+                HasBeenProcessed.Add(id, true);
+            }
+            else
+            {
+                HasBeenProcessed[id] = true;
+            }
+
+        }
+
+        public void ClearProcessedPool()
+        {
+            HasBeenProcessed.Clear();
+        }
 
         public List<RhinoObject> RevertTransformObjects;
         public Rhino.Geometry.Transform LastTransformation;
@@ -77,6 +95,8 @@ namespace STAG
         // listen to object transformation events
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
+            Rhino.RhinoApp.WriteLine("OnBeforeTransformObjects");
+
             // Reset the last transformation and inverse transformation
             LastTransformation = Rhino.Geometry.Transform.Unset;
             LastInverseTransformation = Rhino.Geometry.Transform.Unset;
@@ -92,14 +112,22 @@ namespace STAG
             // You can also access object IDs
             foreach (var obj in e.Objects)
             {
+                // Check if the object is already processed
+                if(HasBeenProcessed.ContainsKey(obj.Id) && HasBeenProcessed[obj.Id] == true)
+                {
+                    continue; // Skip this object if it has been processed
+                }
                 // check permission
                 bool permission = CheckPermission(obj);
                 // block or let go
                 if (permission == false)
                 {
+                    
                     if (RevertTransformObjects.Contains(obj) == false)
                     {
                         RevertTransformObjects.Add(obj);
+                        AddToProcessedPool(obj);
+        
                     }
                 }
                 else
@@ -112,11 +140,19 @@ namespace STAG
 
         public void onAfterTransformObjects(object sender, RhinoAfterTransformObjectsEventArgs e)
         {
+            Rhino.RhinoApp.WriteLine("onAfterTransformObjects");
+
             if (RevertTransformObjects != null && RevertTransformObjects.Count > 0)
             {
                 foreach (var obj in RevertTransformObjects)
                 {
                     RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
+
+                    // if we reached this point, remove the object from the processed pool
+                    if (HasBeenProcessed.ContainsKey(obj.Id))
+                    {
+                        HasBeenProcessed.Remove(obj.Id);
+                    }
                 }
                 RhinoApp.WriteLine($"Blocked tranformation for {RevertTransformObjects.Count} objects.");
             }
@@ -124,24 +160,45 @@ namespace STAG
 
         public void onReplaceRhinoObject(object sender, RhinoReplaceObjectEventArgs e)
         {
+            Rhino.RhinoApp.WriteLine("onReplaceRhinoObject");
             // Access the object being replaced
             RhinoObject oldObj = e.OldRhinoObject;
             RhinoObject newObj = e.NewRhinoObject;
 
             if (oldObj != null && newObj != null)
             {
+                // has this object already been processed ? 
+                if (HasBeenProcessed.ContainsKey(e.ObjectId) && HasBeenProcessed[e.ObjectId] == true)
+                {
+                    //if we reached this point, remove the object from the processed pool
+                    if (HasBeenProcessed.ContainsKey(e.ObjectId))
+                    {
+                        HasBeenProcessed.Remove(e.ObjectId);
+                    }
+                    return; // Skip this object if it has been processed
+                }
+                // Add to processed pool if it hasn't been added yet.
+                AddToProcessedPool(oldObj);
+
                 // check permission
                 RhinoObject obj = RhinoDoc.ActiveDoc.Objects.Find(e.ObjectId);
                 bool permission = CheckPermission(obj);
 
+                ObjRef objRef = new ObjRef(obj.Id);
+
                 // block or let go
                 if (permission == false)
                 {
+                    var oldGeom = oldObj.DuplicateGeometry();
+
+                    Rhino.RhinoDoc.ActiveDoc.Objects.Replace(obj.Id, oldGeom    , true);
                     obj = e.OldRhinoObject;
                     obj.CommitChanges();
-                    RhinoApp.WriteLine($"Blocked replacement for ID: {oldObj.Id}");
+                    RhinoApp.WriteLine($"Blocked Operation for ID: {obj.Id}");
                 }
-                
+
+
+
             }
         }
 
