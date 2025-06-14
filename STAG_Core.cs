@@ -75,7 +75,7 @@ namespace STAG
                     RhinoApp.WriteLine("Object not found.");
                     return;
                 }
-                string currentStage = obj.Attributes.GetUserString(STAG_KEY);
+                string currentStage = GetStage(obj.Id);
                 int index = _stageOrder.IndexOf(currentStage);
                 if (index != -1 && index < _stageOrder.Count - 1)
                 {
@@ -100,7 +100,7 @@ namespace STAG
                     Console.WriteLine("Object is not found.");
                     return;
                 }
-                string currentStage = obj.Attributes.GetUserString(STAG_KEY);
+                string currentStage = GetStage(obj.Id);
                 int index = _stageOrder.IndexOf(currentStage);
                 if (index > 0)
                 {
@@ -112,6 +112,39 @@ namespace STAG
                     RhinoApp.WriteLine($"Object {id} is already at lowest stage or not recognized.");
                     return;
                 }
+            }
+        }
+
+        public string GetStage(Guid rhinoId, bool setIfMissing=true)
+        {
+            var obj = _doc.Objects.FindId(rhinoId);
+            if (obj != null)
+            {
+                string stage = obj.Attributes.GetUserString(STAG_KEY);
+                if (stage == null)
+                    {
+                    if (setIfMissing)
+                    {
+                        stage = _stageOrder.First();
+                        obj.Attributes.SetUserString(STAG_KEY, stage);
+                        obj.CommitChanges();
+                        RhinoApp.WriteLine($"Object {rhinoId} stage set to '{stage}'.");
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+                else
+                {
+                    RhinoApp.WriteLine($"Object {rhinoId} is at stage '{stage}'.");
+                }
+                return stage ?? string.Empty;
+            }
+            else
+            {
+                RhinoApp.WriteLine("Object not found.");
+                return null;
             }
         }
     }
