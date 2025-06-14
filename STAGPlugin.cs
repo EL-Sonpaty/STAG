@@ -223,6 +223,9 @@ namespace STAG
             {
                 foreach (var obj in RevertTransformObjects)
                 {
+                    // Add to HasBeenProcessed pool if it hasn't been added yet.
+                    AddToProcessedPool(obj);
+
                     RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
 
                     // if we reached this point, remove the object from the processed pool
@@ -237,6 +240,7 @@ namespace STAG
 
         public void onReplaceRhinoObject(object sender, RhinoReplaceObjectEventArgs e)
         {
+            
             // is replaced alowed 
             if (IsReplaceAllowed == false)
             {
