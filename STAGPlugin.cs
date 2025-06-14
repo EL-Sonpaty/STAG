@@ -64,7 +64,7 @@ namespace STAG
         public Rhino.Geometry.Transform LastTransformation;
         public Rhino.Geometry.Transform LastInverseTransformation;
 
-        
+
         // listen to object transformation events
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
@@ -88,9 +88,9 @@ namespace STAG
                 if (permission == false)
                 {
                     //BlockObject(obj);
-                    if(RevertTransformObjects.Contains(obj) == false)
+                    if (RevertTransformObjects.Contains(obj) == false)
                     {
-                    RevertTransformObjects.Add(obj);
+                        RevertTransformObjects.Add(obj);
                     }
                 }
                 else
@@ -103,8 +103,8 @@ namespace STAG
 
         public void onAfterTransformObjects(object sender, RhinoAfterTransformObjectsEventArgs e)
         {
-            
-            foreach(var obj in RevertTransformObjects)
+
+            foreach (var obj in RevertTransformObjects)
             {
                 // unblock object
                 //UnblockObject(obj);
