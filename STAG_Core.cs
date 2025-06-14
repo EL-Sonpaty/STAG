@@ -16,6 +16,8 @@ namespace STAG
 
         private readonly RhinoDoc _doc;
 
+        public string STAG_KEY = "StagKey";
+
         private readonly List<string> _stageOrder = new List<string> { "Design", "Engineering", "Production", "Shipping" };
 
         public STAG_Core(RhinoDoc doc)
@@ -24,6 +26,15 @@ namespace STAG
 
             _doc = doc;
 
+        }
+
+        public void FillAllEmptyStagesToDefault()
+        {
+            // get all objects in the model 
+
+            // retrieve the ones that have no stage 
+
+            // set to first stage.
         }
 
         public void SetStage(List<Guid> rhinoIds, string newStage)
@@ -40,7 +51,7 @@ namespace STAG
 
                 {
 
-                    obj.Attributes.SetUserString("Stage", newStage);
+                    obj.Attributes.SetUserString(STAG_KEY, newStage);
 
                     obj.CommitChanges();
 
@@ -84,7 +95,7 @@ namespace STAG
 
                 }
 
-                string currentStage = obj.Attributes.GetUserString("Stage");
+                string currentStage = obj.Attributes.GetUserString(STAG_KEY);
 
                 int index = _stageOrder.IndexOf(currentStage);
 
@@ -134,7 +145,7 @@ namespace STAG
 
                 }
 
-                string currentStage = obj.Attributes.GetUserString("Stage");
+                string currentStage = obj.Attributes.GetUserString(STAG_KEY);
 
                 int index = _stageOrder.IndexOf(currentStage);
 
