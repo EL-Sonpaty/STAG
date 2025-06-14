@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Policy;
+using Eto.Forms;
 using Rhino;
 using Rhino.DocObjects;
 using Rhino.PlugIns;
+using static Rhino.RhinoDoc;
 
 namespace STAG
 {
@@ -15,9 +19,18 @@ namespace STAG
     ///</summary>
     public class STAGPlugin : Rhino.PlugIns.PlugIn
     {
+
+        public string LOCKED_BY_STAG_KEY = "TempStagLocked";
+        public string LOCKED_BY_STAG_VALUE = "This object was locked by STAG plugin. It should have been unlocked by something went wrong, you can delete this usertext.";
+
         public STAGPlugin()
         {
             Instance = this;
+
+            // initialize transformation object list and matrices.
+            RevertTransformObjects = new List<RhinoObject>();
+            LastTransformation = Rhino.Geometry.Transform.Unset;
+            LastInverseTransformation = Rhino.Geometry.Transform.Unset;
         }
 
         ///<summary>Gets the only instance of the STAGPlugin plug-in.</summary>
@@ -31,7 +44,14 @@ namespace STAG
         {
             // Subscribe to the transform objects event
             RhinoDoc.BeforeTransformObjects += OnBeforeTransformObjects;
-            
+            RhinoDoc.AfterTransformObjects += onAfterTransformObjects;
+
+            RhinoDoc.ReplaceRhinoObject += onReplaceRhinoObject;
+
+            RhinoDoc.ModifyObjectAttributes += OnBeforeModifyAttributes;
+
+            RhinoDoc.UserStringChanged += OnBeforeModifyUserStrings;
+
             return LoadReturnCode.Success;
 
         }
@@ -43,19 +63,122 @@ namespace STAG
             base.OnShutdown();
         }
 
-        private void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
+        public bool CheckPermission(RhinoObject obj)
         {
-            // Handle the transform event
-            RhinoApp.WriteLine($"Transform event: {e.Objects.Length} objects transformed");
+            return false;
+        }
+
+
+        public List<RhinoObject> RevertTransformObjects;
+        public Rhino.Geometry.Transform LastTransformation;
+        public Rhino.Geometry.Transform LastInverseTransformation;
+
+
+        // listen to object transformation events
+        public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
+        {
+            // Reset the last transformation and inverse transformation
+            LastTransformation = Rhino.Geometry.Transform.Unset;
+            LastInverseTransformation = Rhino.Geometry.Transform.Unset;
+            RevertTransformObjects.Clear();
 
             // Access the objects being transformed
             RhinoObject[] objects = e.Objects;
 
+            LastTransformation = e.Transform;
+            bool InverseSuccess = LastTransformation.TryGetInverse(out LastInverseTransformation);
+
+
             // You can also access object IDs
             foreach (var obj in e.Objects)
             {
-                RhinoApp.WriteLine($"Object ID: {obj.Id}");
+                // check permission
+                bool permission = CheckPermission(obj);
+                // block or let go
+                if (permission == false)
+                {
+                    if (RevertTransformObjects.Contains(obj) == false)
+                    {
+                        RevertTransformObjects.Add(obj);
+                    }
+                }
+                else
+                {
+                    RhinoApp.WriteLine("Transformation allowed.");
+                }
+            }
+
+        }
+
+        public void onAfterTransformObjects(object sender, RhinoAfterTransformObjectsEventArgs e)
+        {
+            if (RevertTransformObjects != null && RevertTransformObjects.Count > 0)
+            {
+                foreach (var obj in RevertTransformObjects)
+                {
+                    RhinoDoc.ActiveDoc.Objects.Transform(obj.Id, LastInverseTransformation, true);
+                }
+                RhinoApp.WriteLine($"Blocked tranformation for {RevertTransformObjects.Count} objects.");
             }
         }
+
+        public void onReplaceRhinoObject(object sender, RhinoReplaceObjectEventArgs e)
+        {
+            // Access the object being replaced
+            RhinoObject oldObj = e.OldRhinoObject;
+            RhinoObject newObj = e.NewRhinoObject;
+
+            if (oldObj != null && newObj != null)
+            {
+                // check permission
+                RhinoObject obj = RhinoDoc.ActiveDoc.Objects.Find(e.ObjectId);
+                bool permission = CheckPermission(obj);
+
+                // block or let go
+                if (permission == false)
+                {
+                    obj = e.OldRhinoObject;
+                    obj.CommitChanges();
+                    RhinoApp.WriteLine($"Blocked replacement for ID: {oldObj.Id}");
+                }
+                
+            }
+        }
+
+        // listen to attribute modification events
+        private void OnBeforeModifyAttributes(object sender, RhinoModifyObjectAttributesEventArgs e)
+        {
+            // Access the object being transformed
+            RhinoObject obj = e.RhinoObject;
+
+            // what has been modified
+            if (obj != null)
+            {
+
+                var oldAtt = e.OldAttributes;
+                var newAtt = e.NewAttributes;
+
+                // check permission
+                bool permission = CheckPermission(obj);
+
+                // block or let go
+                if (permission == false)
+                {
+                    // revert to "old attributes" if permission is not granted
+                    obj.Attributes = oldAtt;
+                    RhinoApp.WriteLine($"Blocked attribute modification for ID: {obj.Id}");
+                }
+                else
+                {
+                    RhinoApp.WriteLine($"Object ID: {obj.Id}");
+                }
+            }
+        }
+
+        public void OnBeforeModifyUserStrings(object sender, UserStringChangedArgs e)
+        {
+            RhinoApp.WriteLine($"Changing user string");
+        }
+
     }
 }
