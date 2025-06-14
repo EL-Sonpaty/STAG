@@ -139,7 +139,7 @@ namespace STAG
                 {
                     obj = e.OldRhinoObject;
                     obj.CommitChanges();
-                    RhinoApp.WriteLine($"Blocked replacement for ID: {oldObj.Id}");
+                    RhinoApp.WriteLine($"Blocked Operation for ID: {obj.Id}");
                 }
                 
             }
