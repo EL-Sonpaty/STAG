@@ -68,6 +68,10 @@ namespace STAG
         // listen to object transformation events
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
+            LastTransformation = Rhino.Geometry.Transform.Unset;
+            LastInverseTransformation = Rhino.Geometry.Transform.Unset;
+            RevertTransformObjects.Clear();
+
             // Handle the transform event
             RhinoApp.WriteLine($"Transform event: {e.Objects.Length} objects transformed");
 
