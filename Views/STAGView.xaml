@@ -108,10 +108,15 @@
                         ToolTip="Display Current Stages" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="Eye" Foreground="Black"/>
                 </Button>
-                <Button Command="{Binding ClearCurrentStagesDotsCommand}" Grid.Column="4" Grid.Row="4" Margin="5 5 0 5"  
+                <Button Command="{Binding ClearCurrentStagesDotsCommand}" Grid.Column="2" Grid.Row="4" Margin="5 5 0 5"  
                         HorizontalContentAlignment="Center" Background="Transparent"
                         ToolTip="Clear Current Stages dots" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="EyeSlash" Foreground="Black"/>
+                </Button>
+                <Button Command="{Binding ShowGraphCommand}" Grid.Column="4" Grid.Row="4" Margin="5 5 0 5"  
+                        HorizontalContentAlignment="Center" Background="Transparent"
+                        ToolTip="ShowStageGraph" ToolTipService.InitialShowDelay="0">
+                    <fas:IconBlock Icon="ChartPie" Foreground="Black"/>
                 </Button>
             </Grid>
         </Border>

@@ -107,6 +107,8 @@ namespace STAG.ViewModels
                     Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id)?.Attributes.SetUserString(STAG_BAKE_DOT, obj.Id.ToString());
                 }
             }
+            // redraw the document
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
         public ICommand ClearCurrentStagesDotsCommand => new RelayCommand(ClearCurrentStagesDots);
@@ -124,6 +126,13 @@ namespace STAG.ViewModels
             }
             // redraw the document
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
+        }
+
+        public ICommand ShowGraphCommand => new RelayCommand(ShowGraph);
+        private void ShowGraph()
+        {
+            //Add a window message Box
+            System.Windows.MessageBox.Show("Busted!", "The graphs are not implemented yet", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
         }
 
         public ICommand AddNewStageCommand => new RelayCommand(AddNewStage);
