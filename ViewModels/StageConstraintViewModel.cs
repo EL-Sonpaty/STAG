@@ -23,7 +23,7 @@ namespace STAG.Models
             }
         }
 
-        private bool isGeometricalEditable;
+        private bool isGeometricalEditable = true;
         public bool IsGeometricalEditable { 
             get => isGeometricalEditable;
             set
@@ -34,7 +34,7 @@ namespace STAG.Models
                 }
             }
         }
-        private bool isTranslationEditable;
+        private bool isTranslationEditable = true;
         public bool IsTranslationEditable { get => isTranslationEditable;
             set
             {
@@ -45,7 +45,7 @@ namespace STAG.Models
             }
         }
 
-        private bool isAttributesEditable;
+        private bool isAttributesEditable = true;
         public bool IsAttributesEditable { get => isAttributesEditable;
             set
             {
@@ -56,7 +56,7 @@ namespace STAG.Models
             }
         }
 
-        private bool isUserTextsEditable;
+        private bool isUserTextsEditable = true;
         public bool IsUserTextsEditable { get=>isUserTextsEditable;
             set
             {
