@@ -24,11 +24,11 @@ namespace STAG.ViewModels
         {
             DocumentRuntimeSerialNumber = documentSerialNumber;
             Rhino.UI.Panels.Show += OnShowPanel;
-            StageConstraints = new ObservableCollection<Models.StageConstraintViewModel>
+            StageConstraints = new ObservableCollection<ViewModels.StageConstraintViewModel>
             {
-                new Models.StageConstraintViewModel { StageName = "Stage 1" },
-                new Models.StageConstraintViewModel { StageName = "Stage 2" },
-                new Models.StageConstraintViewModel { StageName = "Stage 3" }
+                new ViewModels.StageConstraintViewModel { StageName = "Stage 1" },
+                new ViewModels.StageConstraintViewModel { StageName = "Stage 2" },
+                new ViewModels.StageConstraintViewModel { StageName = "Stage 3" }
             };
         }
 
@@ -97,7 +97,7 @@ namespace STAG.ViewModels
                 // get the object usertexts 
                 string stage = STAG_Core.GetStage(obj.Id);
                 // retrieve the StageConstraintViewModel for the stage
-                StageConstraintViewModel stageModel = STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.FirstOrDefault(s => s.StageName.Equals(stage, StringComparison.OrdinalIgnoreCase));
+                StageConstraintViewModel stageModel = STAG_Core.GetStageConstraintByName(stage);
                 if (!string.IsNullOrEmpty(stage))
                 {
                     // get the bounding box 
@@ -191,7 +191,7 @@ namespace STAG.ViewModels
                 return;
             }
 
-            var newStage = new Models.StageConstraintViewModel
+            var newStage = new ViewModels.StageConstraintViewModel
             {
                 StageName = NewStageName
             };
@@ -199,9 +199,9 @@ namespace STAG.ViewModels
             StageConstraints.Add(newStage);
         }
 
-        public ICommand RemoveStageCommand => new RelayCommand<Models.StageConstraintViewModel>(RemoveStage);
+        public ICommand RemoveStageCommand => new RelayCommand<ViewModels.StageConstraintViewModel>(RemoveStage);
 
-        private void RemoveStage(Models.StageConstraintViewModel stage)
+        private void RemoveStage(ViewModels.StageConstraintViewModel stage)
         {
             if (stage != null && StageConstraints.Contains(stage))
             {
@@ -209,8 +209,8 @@ namespace STAG.ViewModels
             }
         }
 
-        public ICommand MoveStageUpCommand => new RelayCommand<Models.StageConstraintViewModel>(MoveStageUp);
-        private void MoveStageUp(Models.StageConstraintViewModel stage)
+        public ICommand MoveStageUpCommand => new RelayCommand<ViewModels.StageConstraintViewModel>(MoveStageUp);
+        private void MoveStageUp(ViewModels.StageConstraintViewModel stage)
         {
             int index = StageConstraints.IndexOf(stage);
             if (index > 0)
@@ -219,8 +219,8 @@ namespace STAG.ViewModels
             }
         }
 
-        public ICommand MoveStageDownCommand => new RelayCommand<Models.StageConstraintViewModel>(MoveStageDown);
-        private void MoveStageDown(Models.StageConstraintViewModel stage)
+        public ICommand MoveStageDownCommand => new RelayCommand<ViewModels.StageConstraintViewModel>(MoveStageDown);
+        private void MoveStageDown(ViewModels.StageConstraintViewModel stage)
         {
             int index = StageConstraints.IndexOf(stage);
             if (index < StageConstraints.Count - 1)
@@ -229,7 +229,7 @@ namespace STAG.ViewModels
             }
         }
 
-        public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; set; }
+        public ObservableCollection<ViewModels.StageConstraintViewModel> StageConstraints { get; set; }
 
         public List<string> StageNames => StageConstraints.Select(s => s.StageName).ToList();
 
@@ -251,8 +251,8 @@ namespace STAG.ViewModels
             }
         }
 
-        private Models.StageConstraintViewModel _selectedStage;
-        public Models.StageConstraintViewModel SelectedStage
+        private ViewModels.StageConstraintViewModel _selectedStage;
+        public ViewModels.StageConstraintViewModel SelectedStage
         {
             get => _selectedStage;
             set
@@ -269,9 +269,9 @@ namespace STAG.ViewModels
             }
         }
 
-        public ICommand SelectObjectsForStageCommand => new RelayCommand<Models.StageConstraintViewModel>(SelectObjectsForStage);
+        public ICommand SelectObjectsForStageCommand => new RelayCommand<ViewModels.StageConstraintViewModel>(SelectObjectsForStage);
 
-        private void SelectObjectsForStage(Models.StageConstraintViewModel stage)
+        private void SelectObjectsForStage(ViewModels.StageConstraintViewModel stage)
         {
             if (stage == null) return;
 

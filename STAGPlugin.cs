@@ -4,6 +4,7 @@ using Rhino.DocObjects;
 using Rhino.PlugIns;
 using Rhino.UI;
 using STAG.Constants;
+using STAG.Models;
 using STAG.Views;
 using STAG.Wrappers;
 using System;
@@ -186,9 +187,35 @@ namespace STAG
             base.OnShutdown();
         }
 
-        public bool CheckPermission(RhinoObject obj)
+        public bool CheckPermission(RhinoObject obj, ModificationType modifType)
         {
-            return false;
+            
+            string stageName = STAG_Core.GetStage(obj.Id);
+            if (string.IsNullOrEmpty(stageName))
+            {
+                return true; // Default to true if no stage is assigned
+            }
+
+            ViewModels.StageConstraintViewModel stageModel = STAG_Core.GetStageConstraintByName(stageName);
+            if (stageModel == null)
+            {
+                return true; // Default to true if no stage model is found
+            }
+            switch(modifType)
+            {
+                case ModificationType.Transform:
+                    return stageModel.IsTranslationEditable;
+                case ModificationType.Replace:
+                    return stageModel.IsGeometricalEditable;
+                case ModificationType.ModifyAttributes:
+                    return stageModel.IsAttributesEditable;
+                case ModificationType.ModifyUserStrings:
+                    return stageModel.IsUserTextsEditable;
+                default:
+                    return true; // Default to false if no valid modification type is provided
+            }
+
+
         }
 
         public void AddToProcessedPool(RhinoObject obj)
@@ -219,11 +246,11 @@ namespace STAG
         public void OnBeforeTransformObjects(object sender, RhinoTransformObjectsEventArgs e)
         {
 
-            // is replaced alowed 
-            if (IsTransformAllowed == false)
-            {
-                return; // Skip replacement if not allowed
-            }
+            //// is replaced alowed 
+            //if (IsTransformAllowed == false)
+            //{
+            //    return; // Skip replacement if not allowed
+            //}
             Rhino.RhinoApp.WriteLine("OnBeforeTransformObjects");
 
             // Reset the last transformation and inverse transformation
@@ -247,7 +274,7 @@ namespace STAG
                     continue; // Skip this object if it has been processed
                 }
                 // check permission
-                bool permission = CheckPermission(obj);
+                bool permission = CheckPermission(obj, ModificationType.Transform);
                 // block or let go
                 if (permission == false)
                 {
@@ -321,7 +348,7 @@ namespace STAG
 
                 // check permission
                 RhinoObject obj = RhinoDoc.ActiveDoc.Objects.Find(e.ObjectId);
-                bool permission = CheckPermission(obj);
+                bool permission = CheckPermission(obj, ModificationType.Replace);
 
                 ObjRef objRef = new ObjRef(obj.Id);
 
@@ -353,7 +380,7 @@ namespace STAG
                 var newAtt = e.NewAttributes;
 
                 // check permission
-                bool permission = CheckPermission(obj);
+                bool permission = CheckPermission(obj, ModificationType.ModifyAttributes);
 
                 // block or let go
                 if (permission == false)
@@ -374,6 +401,7 @@ namespace STAG
             if (IsModifyUserStringsAllowed == false) return;
 
             RhinoApp.WriteLine($"Changing user string");
+            // TODO 
         }
 
     }

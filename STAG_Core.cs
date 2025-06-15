@@ -214,6 +214,11 @@ namespace STAG
             return count;
         }
 
+        public static ViewModels.StageConstraintViewModel GetStageConstraintByName(string stageName)
+        {
+            return STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.FirstOrDefault(sc => sc.StageName == stageName);
+        }
+
 
 
     }
