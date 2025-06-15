@@ -40,7 +40,7 @@
                             Background="White"
                             Margin="0,0,10,0"
                             Width="200"
-                            Height="30"
+                            Height="25"
                             VerticalAlignment="Center">
                         <TextBox Text="{Binding NewStageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontSize="12"
@@ -57,8 +57,8 @@
                             </TextBox>              
                     </Border>
 
-                    <Button  Command="{Binding AddNewStageCommand}">
-                        <fas:IconBlock Icon="Plus" Foreground="Black" Width="16" Height="16"/>
+                    <Button  Command="{Binding AddNewStageCommand}" Width="25" Height="25" >
+                        <fas:IconBlock Icon="Plus" Foreground="Black"/>
                     </Button>
                 </StackPanel>
 
