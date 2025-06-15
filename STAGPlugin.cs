@@ -66,18 +66,63 @@ namespace STAG
         public ViewModels.STAGPanelViewModel STAGPanelViewModel { get; private set; }
 
 
+        private System.Drawing.Icon LoadIcon()
+        {
+            System.Drawing.Icon icon = null;
+
+            try
+            {
+                // Load PNG from embedded resources
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var resourceName = "STAG.EmbeddedResources.STAG.png";
+
+                using (var stream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    if (stream != null)
+                    {
+                        RhinoApp.WriteLine("Resource found! Loading icon...");
+
+                        // Load the bitmap from stream
+                        var bitmap = new System.Drawing.Bitmap(stream);
+
+                        // Create icon from bitmap - don't dispose bitmap immediately
+                        var iconHandle = bitmap.GetHicon();
+                        icon = System.Drawing.Icon.FromHandle(iconHandle);
+
+                        RhinoApp.WriteLine("Icon loaded successfully!");
+                    }
+                    else
+                    {
+                        RhinoApp.WriteLine($"Resource '{resourceName}' not found!");
+                        icon = System.Drawing.SystemIcons.Application;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RhinoApp.WriteLine($"Error loading embedded icon: {ex.Message}");
+                RhinoApp.WriteLine($"Stack trace: {ex.StackTrace}");
+                icon = System.Drawing.SystemIcons.Application;
+            }
+
+            return icon;
+        }
         // You can override methods here to change the plug-in behavior on
         // loading and shut down, add options pages to the Rhino _Option command
         // and maintain plug-in wide options in a document.
 
         protected override Rhino.PlugIns.LoadReturnCode OnLoad(ref string errorMessage)
         {
+
+            var icon = LoadIcon();
+                        
+
             // Register the panel (only needs to be done once)
             Panels.RegisterPanel(
                 this,
                 typeof(STAGViewHost),
-                "STAGPanel",
-                System.Drawing.SystemIcons.WinLogo,
+                "STAG",
+                icon,
                 PanelType.System
             );
 
