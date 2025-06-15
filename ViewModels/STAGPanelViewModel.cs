@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Rhino.Commands;
+using Rhino;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -42,6 +44,36 @@ namespace STAG.ViewModels
                     SetProperty(value, ref  _newStageName, nameof(NewStageName));
                 }
             }
+        }
+
+        public ICommand DowngradeSelectedObjectsStagesCommand => new RelayCommand(DowngradeSelectedObjectsStages);
+        public void DowngradeSelectedObjectsStages()
+        {
+            // get objects from rhino 
+            var ids = STAG_Core.GetSelectedIds();
+            // make sure the list is not empty
+            if (ids.Count == 0)
+            {
+                RhinoApp.WriteLine("No objects selected.");
+            }
+
+            // upgrade stage
+            STAG_Core.DowngradeStage(ids);
+        }
+
+        public ICommand UpgradeSelectedObjectsStagesCommand => new RelayCommand(UpgradeSelectedObjectsStages);
+        public void UpgradeSelectedObjectsStages()
+        {
+            // get objects from rhino 
+            var ids = STAG_Core.GetSelectedIds();
+            // make sure the list is not empty
+            if (ids.Count == 0)
+            {
+                RhinoApp.WriteLine("No objects selected.");
+            }
+
+            // downgrade stage
+            STAG_Core.UpgradeStage(ids);
         }
 
         public ICommand AddNewStageCommand => new RelayCommand(AddNewStage);

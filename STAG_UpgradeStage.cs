@@ -20,17 +20,7 @@ namespace STAG
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            // get objects from rhino 
-            var ids = STAG_Core.GetSelectedIds();
-            // make sure the list is not empty
-            if (ids.Count == 0)
-            {
-                RhinoApp.WriteLine("No objects selected.");
-                return Result.Failure;
-            }
-
-            // upgrade stage
-            STAG_Core.DowngradeStage(ids);
+            STAGPlugin.Instance.STAGPanelViewModel.UpgradeSelectedObjectsStages();
             return Result.Success;
             
         }
