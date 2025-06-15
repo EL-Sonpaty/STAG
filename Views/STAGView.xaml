@@ -64,43 +64,53 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="5"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"  Background="DimGray" CornerRadius="3">
+                <Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="0"  Background="DimGray" CornerRadius="3">
                     
                 <TextBlock Text="Upgrade/Downgrade"  Foreground="LightGray" HorizontalAlignment="Center" Margin="5 0"/>
                 </Border>
-                <Button Command="{Binding DowngradeSelectedObjectsStagesCommand}" Grid.Column="0" Grid.Row="1"  Margin="0 5 5 5" 
+                <Button Command="{Binding SetDefaultValueCommand}" Grid.Column="0" Grid.Row="1"  Margin="0 5 5 5" 
+                        HorizontalContentAlignment="Center" Background="Transparent"
+                        ToolTip="Set default value to all unassigned elements" ToolTipService.InitialShowDelay="0">
+                    <fas:IconBlock Icon="ChessBishop" Foreground="Black"/>
+                </Button>
+                <Button Command="{Binding DowngradeSelectedObjectsStagesCommand}" Grid.Column="2" Grid.Row="1" Margin="0 5 0 5" 
                         HorizontalContentAlignment="Center" Background="Transparent"
                         ToolTip="Downgrade Selected Objects" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="ChessPawn" Foreground="Black"/>
                 </Button>
-                <Button Command="{Binding UpgradeSelectedObjectsStagesCommand}" Grid.Column="2" Grid.Row="1" Margin="5 5 0 5" 
+                <Button Command="{Binding UpgradeSelectedObjectsStagesCommand}" Grid.Column="4" Grid.Row="1" Margin="5 5 0 5" 
                         HorizontalContentAlignment="Center" Background="Transparent"
                         ToolTip="Upgrade Selected Objects" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="ChessQueen" Foreground="Black"/>
                 </Button>
 
-                <Border Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="0"  Background="DimGray" CornerRadius="3">
+                <Border Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="3"  Background="DimGray" CornerRadius="3">
 
                     <TextBlock Text="Display"  Foreground="LightGray" HorizontalAlignment="Center" Margin="5 0"/>
                 </Border>
-                <Button Command="{Binding ShowCurrentStagesCommand}" Grid.Column="4" Grid.Row="1" Margin="0 5 5 5" 
+                <Button Command="{Binding ShowCurrentStagesCommand}" Grid.Column="0" Grid.Row="5" Margin="0 5 5 5" 
                         HorizontalContentAlignment="Center" Background="Transparent"
                         ToolTip="Display Current Stages" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="Eye" Foreground="Black"/>
                 </Button>
-                <Button Command="{Binding HideCurrentStagesCommand}" Grid.Column="6" Grid.Row="1" Margin="5 5 0 5"  
+                <Button Command="{Binding ClearCurrentStagesDotsCommand}" Grid.Column="4" Grid.Row="4" Margin="5 5 0 5"  
                         HorizontalContentAlignment="Center" Background="Transparent"
-                        ToolTip="Hide Current Stages" ToolTipService.InitialShowDelay="0">
+                        ToolTip="Clear Current Stages dots" ToolTipService.InitialShowDelay="0">
                     <fas:IconBlock Icon="EyeSlash" Foreground="Black"/>
                 </Button>
             </Grid>

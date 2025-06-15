@@ -14,6 +14,7 @@ namespace STAG.ViewModels
 {
     public class STAGPanelViewModel : BaseViewModel
     {
+        string STAG_BAKE_DOT = "StageTempDot";
         private uint DocumentRuntimeSerialNumber { get; }
 
         public STAGPanelViewModel(uint documentSerialNumber)
@@ -46,6 +47,14 @@ namespace STAG.ViewModels
             }
         }
 
+        public ICommand SetDefaultValueCommand => new RelayCommand(SetDefaultValue);
+
+        private void SetDefaultValue()
+        {
+            // get all objects in the model
+            STAG_Core.FillAllEmptyStagesToDefault();
+        }
+
         public ICommand DowngradeSelectedObjectsStagesCommand => new RelayCommand(DowngradeSelectedObjectsStages);
         public void DowngradeSelectedObjectsStages()
         {
@@ -74,6 +83,47 @@ namespace STAG.ViewModels
 
             // downgrade stage
             STAG_Core.UpgradeStage(ids);
+        }
+
+        public ICommand ShowCurrentStagesCommand => new RelayCommand(ShowCurrentStages);
+        private void ShowCurrentStages()
+        {
+            // get all objects in the model with a stage
+            foreach (var obj in Rhino.RhinoDoc.ActiveDoc.Objects)
+            {
+                // get the object usertexts 
+                string stage = STAG_Core.GetStage(obj.Id);
+                if (!string.IsNullOrEmpty(stage))
+                {
+                    // get the bounding box 
+                    var bbox = obj.Geometry.GetBoundingBox(false);
+                    // get the center point of the bounding box
+                    var center = bbox.Center;
+                    // add a text dot in the model 
+                    var dot = new Rhino.Geometry.TextDot(stage, center);
+                    // add the text dot to the model
+                    var id = Rhino.RhinoDoc.ActiveDoc.Objects.AddTextDot(dot);
+                    // add a user string to the text dot with the object id
+                    Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id)?.Attributes.SetUserString(STAG_BAKE_DOT, obj.Id.ToString());
+                }
+            }
+        }
+
+        public ICommand ClearCurrentStagesDotsCommand => new RelayCommand(ClearCurrentStagesDots);
+        private void ClearCurrentStagesDots()
+        {
+            // get all objects in the model with a stage
+            foreach (var obj in Rhino.RhinoDoc.ActiveDoc.Objects)
+            {
+                // check if the object has a user string with the STAG_BAKE_DOT key
+                if (obj.Attributes.GetUserString(STAG_BAKE_DOT) != null)
+                {
+                    // delete the object
+                    Rhino.RhinoDoc.ActiveDoc.Objects.Delete(obj.Id, true);
+                }
+            }
+            // redraw the document
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
         public ICommand AddNewStageCommand => new RelayCommand(AddNewStage);

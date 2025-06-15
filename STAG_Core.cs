@@ -64,7 +64,7 @@ namespace STAG
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
-        private static string GetStage(Guid rhinoId, bool setIfMissing = true)
+        public static string GetStage(Guid rhinoId, bool setIfMissing = false)
         {
             var obj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(rhinoId);
             if (obj != null)
