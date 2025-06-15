@@ -18,6 +18,12 @@ namespace STAG.ViewModels
         {
             DocumentRuntimeSerialNumber = documentSerialNumber;
             Rhino.UI.Panels.Show += OnShowPanel;
+            StageConstraints = new ObservableCollection<Models.StageConstraintViewModel>
+            {
+                new Models.StageConstraintViewModel { StageName = "Stage 1" },
+                new Models.StageConstraintViewModel { StageName = "Stage 2" },
+                new Models.StageConstraintViewModel { StageName = "Stage 3" }
+            };
         }
 
         private void OnShowPanel(object sender, Rhino.UI.ShowPanelEventArgs e)
@@ -91,6 +97,6 @@ namespace STAG.ViewModels
             }
         }
 
-        public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; } = new ObservableCollection<Models.StageConstraintViewModel>();
+        public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; set; }
     }
 }
