@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:STAG.Views"
              xmlns:vm="clr-namespace:STAG.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              Height="Auto" Width="Auto">
 
@@ -31,7 +32,29 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBox Text="{Binding NewStageName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,10,0" Width="100"/>
+                    <Border CornerRadius="6"
+                            BorderBrush="Gray"
+                            BorderThickness="1"
+                            Background="White"
+                            Margin="0,0,10,0"
+                            Width="200"
+                            Height="30"
+                            VerticalAlignment="Center">
+                        <TextBox Text="{Binding NewStageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontSize="12"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Height="Auto"
+                                VerticalContentAlignment="Center"
+                                FocusVisualStyle="{x:Null}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="KeyDown">
+                                        <i:InvokeCommandAction Command="{Binding StageInputKeyDownCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>              
+                    </Border>
+
                     <Button  Command="{Binding AddNewStageCommand}">
                         <fas:IconBlock Icon="Plus" Foreground="Black" Width="16" Height="16"/>
                     </Button>
@@ -95,15 +118,9 @@
                         <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16" Margin="5 0"
                                        Visibility="{Binding ElementName=IsUserTextsEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
-
-
-
                     </StackPanel>
-
                 </DataTemplate>
             </ListBox.ItemTemplate>
-
         </ListBox>
-
     </Grid>
 </UserControl>
