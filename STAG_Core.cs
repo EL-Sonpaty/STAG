@@ -3,6 +3,7 @@ using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 namespace STAG
@@ -187,6 +188,33 @@ namespace STAG
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
 
         }
+
+        public static Dictionary<string, int> CountObjectsByStages()
+        {
+            Dictionary<string, int> count = new Dictionary<string, int>();
+
+            var objects = Rhino.RhinoDoc.ActiveDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject);
+
+            foreach (var obj in objects)
+            {
+                string stage = GetStage(obj.Id);
+                if (string.IsNullOrEmpty(stage))
+                {
+                    continue;
+                }
+                if (count.ContainsKey(stage))
+                {
+                    count[stage]++;
+                }
+                else
+                {
+                    count[stage] = 1;
+                }
+            }
+            return count;
+        }
+
+
 
     }
 }
