@@ -54,7 +54,7 @@ namespace STAG.ViewModels
                 return;
             }
 
-            var newStage = new Models.StageConstraint
+            var newStage = new Models.StageConstraintViewModel
             {
                 StageName = NewStageName
             };
@@ -62,9 +62,9 @@ namespace STAG.ViewModels
             StageConstraints.Add(newStage);
         }
 
-        public ICommand RemoveStageCommand => new RelayCommand<Models.StageConstraint>(RemoveStage);
+        public ICommand RemoveStageCommand => new RelayCommand<Models.StageConstraintViewModel>(RemoveStage);
 
-        private void RemoveStage(Models.StageConstraint stage)
+        private void RemoveStage(Models.StageConstraintViewModel stage)
         {
             if (stage != null && StageConstraints.Contains(stage))
             {
@@ -72,8 +72,8 @@ namespace STAG.ViewModels
             }
         }
 
-        public ICommand MoveStageUpCommand => new RelayCommand<Models.StageConstraint>(MoveStageUp);
-        private void MoveStageUp(Models.StageConstraint stage)
+        public ICommand MoveStageUpCommand => new RelayCommand<Models.StageConstraintViewModel>(MoveStageUp);
+        private void MoveStageUp(Models.StageConstraintViewModel stage)
         {
             int index = StageConstraints.IndexOf(stage);
             if (index > 0)
@@ -82,8 +82,8 @@ namespace STAG.ViewModels
             }
         }
 
-        public ICommand MoveStageDownCommand => new RelayCommand<Models.StageConstraint>(MoveStageDown);
-        private void MoveStageDown(Models.StageConstraint stage)
+        public ICommand MoveStageDownCommand => new RelayCommand<Models.StageConstraintViewModel>(MoveStageDown);
+        private void MoveStageDown(Models.StageConstraintViewModel stage)
         {
             int index = StageConstraints.IndexOf(stage);
             if (index < StageConstraints.Count - 1)
@@ -92,6 +92,6 @@ namespace STAG.ViewModels
             }
         }
 
-        public ObservableCollection<Models.StageConstraint> StageConstraints { get; } = new ObservableCollection<Models.StageConstraint>();
+        public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; } = new ObservableCollection<Models.StageConstraintViewModel>();
     }
 }
