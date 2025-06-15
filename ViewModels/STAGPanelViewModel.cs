@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using STAG.Models;
+using Eto.Wpf;
+using System.Windows.Media;
 
 namespace STAG.ViewModels
 {
@@ -94,6 +96,8 @@ namespace STAG.ViewModels
             {
                 // get the object usertexts 
                 string stage = STAG_Core.GetStage(obj.Id);
+                // retrieve the StageConstraintViewModel for the stage
+                StageConstraintViewModel stageModel = STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.FirstOrDefault(s => s.StageName.Equals(stage, StringComparison.OrdinalIgnoreCase));
                 if (!string.IsNullOrEmpty(stage))
                 {
                     // get the bounding box 
@@ -101,9 +105,25 @@ namespace STAG.ViewModels
                     // get the center point of the bounding box
                     var center = bbox.Center;
                     // add a text dot in the model 
-                    var dot = new Rhino.Geometry.TextDot(stage, center);
+                    var dot = new Rhino.Geometry.TextDot(stage, center);                   
+
                     // add the text dot to the model
                     var id = Rhino.RhinoDoc.ActiveDoc.Objects.AddTextDot(dot);
+                    // set the dot color to the stage color
+                    if (stageModel != null)
+                    {
+                        var brush = stageModel.StageColor;
+                        // Convert brush to RGB values
+                        int R = ((SolidColorBrush)brush).Color.R;
+                        int G = ((SolidColorBrush)brush).Color.G;
+                        int B = ((SolidColorBrush)brush).Color.B;
+                        
+
+                        var dotObj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id);
+                        dotObj.Attributes.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
+                        dotObj.Attributes.ObjectColor = System.Drawing.Color.FromArgb(R, G, B);
+                        dotObj.CommitChanges();
+                    }
                     // add a user string to the text dot with the object id
                     Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id)?.Attributes.SetUserString(STAG_BAKE_DOT, obj.Id.ToString());
                 }

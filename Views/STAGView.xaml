@@ -37,19 +37,20 @@
                      Padding="4">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Height="16">
 
-                            <TextBlock Text="{Binding StageName}" Margin="5 0"/>
-                            <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16" Margin="5 0" 
+                            <Rectangle Width="32" Height="16" RadiusX="6" RadiusY="6" StrokeThickness="2" Fill="{Binding StageColor}" Stroke="White"/>
+                            <TextBlock Text="{Binding StageName}" FontWeight="Bold" Margin="5 0" VerticalAlignment="Top"/>
+                            <fas:IconBlock Icon="Cubes" Foreground="Black" Margin="5 0" 
                                        Visibility="{Binding IsGeometricalEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
-                            <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16" Margin="5 0"
+                            <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Margin="5 0"
                                        Visibility="{Binding IsTranslationEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
-                            <fas:IconBlock Icon="Tags" Foreground="Black" Width="16" Height="16" Margin="5 0"
+                            <fas:IconBlock Icon="Tags" Foreground="Black" Margin="5 0"
                                        Visibility="{Binding IsAttributesEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
-                            <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16" Margin="5 0"
+                            <fas:IconBlock Icon="Font" Foreground="Black" Margin="5 0"
                                        Visibility="{Binding IsUserTextsEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
                         </StackPanel>
