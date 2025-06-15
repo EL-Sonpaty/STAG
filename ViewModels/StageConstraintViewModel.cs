@@ -18,8 +18,7 @@ namespace STAG.Models
             {
                 if (stageName != value)
                 {
-                    stageName = value;
-                    OnPropertyChanged(nameof(StageName));
+                    SetProperty(value, ref stageName, nameof(StageName));
                 }
             }
         }
@@ -31,8 +30,7 @@ namespace STAG.Models
             {
                 if (isGeometricalEditable != value)
                 {
-                    isGeometricalEditable = value;
-                    OnPropertyChanged(nameof(IsGeometricalEditable));
+                    SetProperty(value, ref isGeometricalEditable, nameof(IsGeometricalEditable));
                 }
             }
         }
@@ -42,8 +40,7 @@ namespace STAG.Models
             {
                 if (isTranslationEditable != value)
                 {
-                    isTranslationEditable = value;
-                    OnPropertyChanged(nameof(IsTranslationEditable));
+                    SetProperty(value, ref isTranslationEditable, nameof(IsTranslationEditable));
                 }
             }
         }
@@ -54,8 +51,7 @@ namespace STAG.Models
             {
                 if (isAttributesEditable != value)
                 {
-                    isAttributesEditable = value;
-                    OnPropertyChanged(nameof(IsAttributesEditable));
+                    SetProperty(value, ref isAttributesEditable, nameof(IsAttributesEditable));
                 }
             }
         }
@@ -66,8 +62,7 @@ namespace STAG.Models
             {
                 if (isUserTextsEditable != value)
                 {
-                    isUserTextsEditable = value;
-                    OnPropertyChanged(nameof(IsUserTextsEditable));
+                    SetProperty(value, ref isUserTextsEditable, nameof(IsUserTextsEditable));
                 }
             }
         }

@@ -57,9 +57,10 @@
                                     </Button>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5">
-                                    <ToggleButton IsChecked="{Binding IsGeometricalEditable}">
+                                    <CheckBox IsChecked="{Binding IsGeometricalEditable}">
                                         <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
-                                    </ToggleButton>
+                                    </CheckBox>
+                                    <TextBlock Text="{Binding IsGeometryEditable}"/>
                                     <ToggleButton IsChecked="{Binding IsTranslationEditable}">
                                         <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
                                     </ToggleButton>

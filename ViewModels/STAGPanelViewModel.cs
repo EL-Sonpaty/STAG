@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -33,8 +34,7 @@ namespace STAG.ViewModels
                 System.Diagnostics.Debug.WriteLine($"NewStageName setter called: old='{_newStageName}', new='{value}'");
                 if (_newStageName != value)
                 {
-                    _newStageName = value;
-                    OnPropertyChanged(nameof(NewStageName));
+                    SetProperty(value, ref  _newStageName, nameof(NewStageName));
                 }
             }
         }
