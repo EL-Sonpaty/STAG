@@ -36,6 +36,7 @@
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
     <PackageReference Include="RhinoCommon" Version="8.19.25132.1001" ExcludeAssets="runtime" />
     <PackageReference Include="RhinoWindows" Version="8.19.25132.1001" />
   </ItemGroup>
