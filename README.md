@@ -73,9 +73,13 @@ If you like this idea — **star the repo ⭐ and share feedback!**
 
 Developed by:
 
-Ahmed El-Sonpaty(https://github.com/ahmedsonpaty)
-
-
+Ahmed El-Sonpaty (https://github.com/ahmedsonpaty)
+Sylvain Usai (https://github.com/usai-sylvain))
+Ammar Salama (https://github.com/amabedsalama)
+Eesha Jain (https://github.com/eesha-on-jupiter)
+Sevan Mohammadpour (https://github.com/sewanmp)
+Razi S (https://github.com/RaziS15)
+Ziad Fayed (https://github.com/ZiadFayed)
 ---
 
 ## 📄 License
