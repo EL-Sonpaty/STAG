@@ -37,7 +37,7 @@
                     </Button>
                 </StackPanel>
 
-                <ListBox Grid.Row="1" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
+                <ListBox Grid.Row="1" x:Name="EditListBox" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical" Margin="0 5 0 0">
@@ -60,7 +60,7 @@
                                     <CheckBox IsChecked="{Binding IsGeometricalEditable}">
                                         <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
                                     </CheckBox>
-                                    <TextBlock Text="{Binding IsGeometryEditable}"/>
+                                    <TextBlock Text="{Binding IsGeometricalEditable}"/>
                                     <ToggleButton IsChecked="{Binding IsTranslationEditable}">
                                         <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
                                     </ToggleButton>
@@ -78,23 +78,23 @@
             </Grid>
         </Expander>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
+        <ListBox Grid.Row="1" x:Name="ReportListBox" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Index}" Margin="5 0"/>
                         <TextBlock Text="{Binding StageName}" Margin="5 0"/>
                         <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16" Margin="5 0" 
-                                       Visibility="{Binding ElementName=IsGeometricalEditable,
+                                       Visibility="{Binding IsGeometricalEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
                         <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16" Margin="5 0"
-                                       Visibility="{Binding ElementName=IsTranslationEditable,
+                                       Visibility="{Binding IsTranslationEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
                         <fas:IconBlock Icon="Tags" Foreground="Black" Width="16" Height="16" Margin="5 0"
-                                       Visibility="{Binding ElementName=IsAttributesEditable,
+                                       Visibility="{Binding IsAttributesEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
                         <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16" Margin="5 0"
-                                       Visibility="{Binding ElementName=IsUserTextsEditable,
+                                       Visibility="{Binding IsUserTextsEditable,
                                         Converter={StaticResource BoolToVisConverter}}"/>
 
 
