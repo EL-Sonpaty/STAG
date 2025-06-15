@@ -98,5 +98,22 @@ namespace STAG.ViewModels
         }
 
         public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; set; }
+        public ICommand StageInputKeyDownCommand => new RelayCommand<KeyEventArgs>(OnStageInputKeyDown);
+
+        private void OnStageInputKeyDown(KeyEventArgs e)
+        {
+            // Safety check in case parameter is null
+            if (e == null)
+                return;
+
+            if (e.Key == Key.Enter)
+            {
+
+                if (AddNewStageCommand.CanExecute(null))
+                    AddNewStageCommand.Execute(null);
+
+                e.Handled = true;
+            }
+        }
     }
 }
