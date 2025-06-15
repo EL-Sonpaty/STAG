@@ -17,7 +17,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -57,10 +59,9 @@
                                     </Button>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5">
-                                    <CheckBox IsChecked="{Binding IsGeometricalEditable}">
+                                    <ToggleButton IsChecked="{Binding IsGeometricalEditable}">
                                         <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
-                                    </CheckBox>
-                                    <TextBlock Text="{Binding IsGeometricalEditable}"/>
+                                    </ToggleButton>
                                     <ToggleButton IsChecked="{Binding IsTranslationEditable}">
                                         <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
                                     </ToggleButton>
@@ -78,7 +79,7 @@
             </Grid>
         </Expander>
 
-        <ListBox Grid.Row="1" x:Name="ReportListBox" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
+        <ListBox Grid.Row="2" x:Name="ReportListBox" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
