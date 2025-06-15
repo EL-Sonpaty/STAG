@@ -47,6 +47,13 @@ namespace STAG.ViewModels
                 return;
             }
 
+            // Check if a stage with the same name already exists
+            if (StageConstraints.Any(s => s.StageName.Equals(NewStageName, StringComparison.OrdinalIgnoreCase)))
+            {
+                System.Windows.MessageBox.Show("A stage with this name already exists.", "Duplicate Stage Name", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+
             var newStage = new Models.StageConstraint
             {
                 StageName = NewStageName
