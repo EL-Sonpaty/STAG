@@ -22,10 +22,9 @@ namespace STAG.Views
     /// </summary>
     public partial class STAGView : UserControl
     {
-        public STAGView(uint documentSerialNumber)
+        public STAGView()
         {
-            HardCodedData.DocumentSerialNumber = documentSerialNumber;
-            DataContext = new STAGPanelViewModel(documentSerialNumber);
+            DataContext = STAGPlugin.Instance.STAGPanelViewModel;
             InitializeComponent();
         }
 

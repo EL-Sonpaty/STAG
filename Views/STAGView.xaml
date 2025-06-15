@@ -5,61 +5,58 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:STAG.Views"
+             xmlns:vm="clr-namespace:STAG.ViewModels"
              mc:Ignorable="d" 
              Height="Auto" Width="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0 5 0 0" >
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBox Text="{Binding NewStageName,Mode=TwoWay}"  Margin="0,0,10,0"/>
-                <Button  Command="{Binding AddStage}">
-                    <fas:IconBlock Icon="Add" Foreground="Black" Width="16" Height="16"/>
-                </Button>
-            </StackPanel>
-
-         
-            <ListBox ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5} " >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical" Margin="0 5 0 0" >
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBox Text="{Binding StageName,Mode=TwoWay}"  Margin="0,0,10,0"/>
-                                <Button  Command="{Binding MoveUp}" >
-                                    <fas:IconBlock Icon="ArrowAltCircleUp" Foreground="Black" Width="16" Height="16"/>
-                                </Button>
-                                <Button  Command="{Binding MoveDown}">
-                                    <fas:IconBlock Icon="ArrowAltCircleDown" Foreground="Black" Width="16" Height="16"/>
-                                </Button>
-                                <Button  Command="{Binding RemoveStageCommand}" CommandParameter="{Binding}">
-                                    <fas:IconBlock Icon="Minus" Foreground="Black" Width="16" Height="16"/>
-                                </Button>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <ToggleButton IsChecked="{Binding IsGeometricalEditable}" >
-                                    <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
-                                </ToggleButton>
-                                <ToggleButton  IsChecked="{Binding IsTranslationEditable}" >
-                                    <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
-                                </ToggleButton>
-                                <ToggleButton IsChecked="{Binding IsAttributesEditable}" >
-                                    <fas:IconBlock Icon="Tags" Foreground="Black" Width="16" Height="16"/>
-                                </ToggleButton>
-                                <ToggleButton  IsChecked="{Binding IsUserTextsEditable}" >
-                                    <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16"/>
-                                </ToggleButton>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-      
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBox Text="{Binding NewStageName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,10,0" Width="100"/>
+            <Button  Command="{Binding AddNewStageCommand}">
+                <fas:IconBlock Icon="Plus" Foreground="Black" Width="16" Height="16"/>
+            </Button>
         </StackPanel>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Margin="0 5 0 0">
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBox Text="{Binding StageName,Mode=TwoWay}" Margin="0,0,10,0"/>
+                            <Button Command="{Binding DataContext.MoveStageUpCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}">
+                                <fas:IconBlock Icon="ArrowAltCircleUp" Foreground="Black" Width="16" Height="16"/>
+                            </Button>
+                            <Button Command="{Binding DataContext.MoveStageDownCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}">
+                                <fas:IconBlock Icon="ArrowAltCircleDown" Foreground="Black" Width="16" Height="16"/>
+                            </Button>
+                            <Button Command="{Binding DataContext.RemoveStageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}">
+                                <fas:IconBlock Icon="Minus" Foreground="Black" Width="16" Height="16"/>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <ToggleButton IsChecked="{Binding IsGeometricalEditable}">
+                                <fas:IconBlock Icon="Cubes" Foreground="Black" Width="16" Height="16"/>
+                            </ToggleButton>
+                            <ToggleButton IsChecked="{Binding IsTranslationEditable}">
+                                <fas:IconBlock Icon="ArrowsAlt" Foreground="Black" Width="16" Height="16"/>
+                            </ToggleButton>
+                            <ToggleButton IsChecked="{Binding IsAttributesEditable}">
+                                <fas:IconBlock Icon="Tags" Foreground="Black" Width="16" Height="16"/>
+                            </ToggleButton>
+                            <ToggleButton IsChecked="{Binding IsUserTextsEditable}">
+                                <fas:IconBlock Icon="Font" Foreground="Black" Width="16" Height="16"/>
+                            </ToggleButton>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>
-
-
-

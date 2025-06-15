@@ -8,7 +8,7 @@ namespace STAG.Models
 {
     public class StageConstraint
     {
-        public int Index { get; set; }
+        public int Index => STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.IndexOf(this);
         public string StageName { get; set; }
         public bool IsGeometricalEditable { get; set; }
         public bool IsTranslationEditable { get; set; }
@@ -16,5 +16,9 @@ namespace STAG.Models
         public bool IsUserTextsEditable { get; set; }
         public DateTime DateAdded { get; set; }
         public string AddedBy { get; set; }
+
+
+        
+
     }
 }

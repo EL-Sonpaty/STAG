@@ -49,6 +49,8 @@ namespace STAG
         public STAGPlugin()
         {
             Instance = this;
+            // initialize the STAGPanelViewModel
+            STAGPanelViewModel = new ViewModels.STAGPanelViewModel(HardCodedData.DocumentSerialNumber);
 
             ListenToRhino = true;
 
@@ -60,6 +62,9 @@ namespace STAG
 
         ///<summary>Gets the only instance of the STAGPlugin plug-in.</summary>
         public static STAGPlugin Instance { get; private set; }
+
+        public ViewModels.STAGPanelViewModel STAGPanelViewModel { get; private set; }
+
 
         // You can override methods here to change the plug-in behavior on
         // loading and shut down, add options pages to the Rhino _Option command
