@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using STAG.Models;
 
 namespace STAG.ViewModels
 {
@@ -189,6 +190,9 @@ namespace STAG.ViewModels
         }
 
         public ObservableCollection<Models.StageConstraintViewModel> StageConstraints { get; set; }
+
+        public List<string> StageNames => StageConstraints.Select(s => s.StageName).ToList();
+
         public ICommand StageInputKeyDownCommand => new RelayCommand<KeyEventArgs>(OnStageInputKeyDown);
 
         private void OnStageInputKeyDown(KeyEventArgs e)
@@ -206,5 +210,36 @@ namespace STAG.ViewModels
                 e.Handled = true;
             }
         }
+
+        private Models.StageConstraintViewModel _selectedStage;
+        public Models.StageConstraintViewModel SelectedStage
+        {
+            get => _selectedStage;
+            set
+            {
+                if (_selectedStage != value)
+                {
+                    SetProperty(value, ref _selectedStage, nameof(SelectedStage));
+                    // Automatically trigger the selection when the property changes
+                    if (value != null)
+                    {
+                        SelectObjectsForStage(value);
+                    }
+                }
+            }
+        }
+
+        public ICommand SelectObjectsForStageCommand => new RelayCommand<Models.StageConstraintViewModel>(SelectObjectsForStage);
+
+        private void SelectObjectsForStage(Models.StageConstraintViewModel stage)
+        {
+            if (stage == null) return;
+
+            // Your Rhino object selection logic goes here
+            RhinoApp.WriteLine($"Selecting objects for stage: {stage.StageName}");
+            STAG_Core.SelectObjectsForStage(stage.StageName);
+            
+        }
+
     }
 }

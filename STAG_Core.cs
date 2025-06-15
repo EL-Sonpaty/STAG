@@ -22,9 +22,10 @@ namespace STAG
                 string currentStage = obj.Attributes.GetUserString(STAG_KEY);
                 if (string.IsNullOrEmpty(currentStage))
                 {
-                    obj.Attributes.SetUserString(STAG_KEY, _stageOrder.First());
+                    string firstName = STAGPlugin.Instance.STAGPanelViewModel.StageNames.First();
+                    obj.Attributes.SetUserString(STAG_KEY, firstName);
                     obj.CommitChanges();
-                    RhinoApp.WriteLine($"Object {obj.Id} stage set to '{_stageOrder.First()}'.");
+                    RhinoApp.WriteLine($"Object {obj.Id} stage set to '{firstName}'.");
                 }
             }
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
@@ -74,7 +75,7 @@ namespace STAG
                 {
                     if (setIfMissing)
                     {
-                        stage = _stageOrder.First();
+                        stage = STAGPlugin.Instance.STAGPanelViewModel.StageNames.First();
                         obj.Attributes.SetUserString(STAG_KEY, stage);
                         obj.CommitChanges();
                         RhinoApp.WriteLine($"Object {rhinoId} stage set to '{stage}'.");
@@ -99,6 +100,7 @@ namespace STAG
 
         public static void UpgradeStage(List<Guid> rhinoIds)
         {
+            var stageNames = STAGPlugin.Instance.STAGPanelViewModel.StageNames;
             foreach (var id in rhinoIds)
             {
                 var obj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id);
@@ -108,10 +110,10 @@ namespace STAG
                     return;
                 }
                 string currentStage = GetStage(obj.Id);
-                int index = _stageOrder.IndexOf(currentStage);
-                if (index != -1 && index < _stageOrder.Count - 1)
+                int index = stageNames.IndexOf(currentStage);
+                if (index != -1 && index < stageNames.Count - 1)
                 {
-                    string nextStage = _stageOrder[index + 1];
+                    string nextStage = stageNames[index + 1];
                     SetStage(new List<Guid> { id }, nextStage);
                 }
                 else
@@ -124,6 +126,8 @@ namespace STAG
         }
         public static void DowngradeStage(List<Guid> rhinoIds)
         {
+            var stageNames = STAGPlugin.Instance.STAGPanelViewModel.StageNames;
+
             foreach (var id in rhinoIds)
             {
                 var obj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(id);
@@ -133,10 +137,10 @@ namespace STAG
                     return;
                 }
                 string currentStage = GetStage(obj.Id);
-                int index = _stageOrder.IndexOf(currentStage);
+                int index = stageNames.IndexOf(currentStage);
                 if (index > 0)
                 {
-                    string previousStage = _stageOrder[index - 1];
+                    string previousStage = stageNames[index - 1];
                     SetStage(new List<Guid> { id }, previousStage);
                 }
                 else
@@ -145,6 +149,43 @@ namespace STAG
                     return;
                 }
             }
+        }
+
+        public static void SelectObjectsForStage(string stageName)
+        {
+            var stageNames = STAGPlugin.Instance.STAGPanelViewModel.StageNames;
+
+            if (!stageNames.Contains(stageName))
+            {
+                RhinoApp.WriteLine($"Stage '{stageName}' is not recognized.");
+                return;
+            }
+
+            var objects = Rhino.RhinoDoc.ActiveDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject);
+            List<Guid> selectedIds = new List<Guid>();
+
+            foreach (var obj in objects)
+            {
+                string stage = GetStage(obj.Id);
+                if (stage == stageName)
+                {
+                    selectedIds.Add(obj.Id);
+                }
+            }
+
+            if (selectedIds.Count > 0)
+            {
+                Rhino.RhinoDoc.ActiveDoc.Objects.Select(selectedIds);
+                RhinoApp.WriteLine($"Selected {selectedIds.Count} objects at stage '{stageName}'.");
+            }
+            else
+            {
+                RhinoApp.WriteLine($"No objects found at stage '{stageName}'.");
+            }
+
+            // Redraw Rhino view 
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
+
         }
 
     }

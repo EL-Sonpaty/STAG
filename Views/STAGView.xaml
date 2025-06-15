@@ -27,12 +27,14 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5">
-            <ListBox x:Name="ReportListBox" ItemsSource="{Binding StageConstraints}" d:ItemsSource="{d:SampleData ItemCount =5}"
-                                                  BorderThickness="0"
-                             BorderBrush="LightGray"
-                             Background="Transparent"
-                             Padding="4"
->
+            <ListBox x:Name="ReportListBox" 
+                     ItemsSource="{Binding StageConstraints}" 
+                     SelectedItem="{Binding SelectedStage, Mode=TwoWay}"
+                     d:ItemsSource="{d:SampleData ItemCount =5}"
+                     BorderThickness="0"
+                     BorderBrush="LightGray"
+                     Background="Transparent"
+                     Padding="4">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
