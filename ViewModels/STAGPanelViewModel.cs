@@ -31,7 +31,6 @@ namespace STAG.ViewModels
             get => _newStageName;
             set
             {
-                System.Diagnostics.Debug.WriteLine($"NewStageName setter called: old='{_newStageName}', new='{value}'");
                 if (_newStageName != value)
                 {
                     SetProperty(value, ref  _newStageName, nameof(NewStageName));
