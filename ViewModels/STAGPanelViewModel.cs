@@ -26,9 +26,12 @@ namespace STAG.ViewModels
             Rhino.UI.Panels.Show += OnShowPanel;
             StageConstraints = new ObservableCollection<ViewModels.StageConstraintViewModel>
             {
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 1" },
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 2" },
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 3" }
+                new ViewModels.StageConstraintViewModel { StageName = "Context" },
+                new ViewModels.StageConstraintViewModel { StageName = "Concept" },
+                new ViewModels.StageConstraintViewModel { StageName = "Base" },
+                new ViewModels.StageConstraintViewModel { StageName = "Detail" },
+                new ViewModels.StageConstraintViewModel { StageName = "Production" },
+                new ViewModels.StageConstraintViewModel { StageName = "Shipping" }
             };
         }
 
