@@ -57,7 +57,7 @@ Each stage includes constraints such as:
 ### 4. Enforce Restrictions  
 Try moving, transforming, or editing object/user attributes — if the current stage disallows it, STAG will **block the action and roll it back** in Rhino.  
 
-_--> Important note : _
+--> Important note :
 STAG is listening to every changes in the model which can sometime leads to long update loops (as in "endless"). The "restriction" feature isn't very mature yet and require to listen constantly to every rhino event. 
 (note for self : best workaround would probably be to disable the "Allow Geometrical changes" change for now as this is bound to the ReplaceObject event in Rhino which is basically called everytime. Investigate if the Allow attribute edits is triggered by Hide/Show). 
 This being said, you can disable the listening with the command STAG_StopListening and enable it with STAG_StartListening.
