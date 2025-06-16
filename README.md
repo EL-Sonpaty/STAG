@@ -9,7 +9,7 @@ Track the lifecycle of elements — from **Design ➜ Production ➜ Fabrication
 - Object Attributes  
 - User Object Attributes
 
-DISCLAIMER : STAG was born and build over two days at the AEC Tech+ Hackathon. As such, it's not final product and is only provided here as a POC. 
+**DISCLAIMER** : STAG was born and build over two days at the AEC Tech+ Hackathon. As such, it's not final product and is only provided here as a POC. 
 Some command might not work entirely as expected and can lead to loss of data or freeze rhino. Save your model before using STAG.
 
 ---
@@ -57,7 +57,7 @@ Each stage includes constraints such as:
 ### 4. Enforce Restrictions  
 Try moving, transforming, or editing object/user attributes — if the current stage disallows it, STAG will **block the action and roll it back** in Rhino.  
 
---> Important note : 
+_--> Important note : _
 STAG is listening to every changes in the model which can sometime leads to long update loops (as in "endless"). The "restriction" feature isn't very mature yet and require to listen constantly to every rhino event. 
 (note for self : best workaround would probably be to disable the "Allow Geometrical changes" change for now as this is bound to the ReplaceObject event in Rhino which is basically called everytime. Investigate if the Allow attribute edits is triggered by Hide/Show). 
 This being said, you can disable the listening with the command STAG_StopListening and enable it with STAG_StartListening.
