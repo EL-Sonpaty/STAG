@@ -65,7 +65,7 @@ STAG is listening to every changes in the model which can sometime leads to long
 This being said, you can disable the listening with the command STAG_StopListening and enable it with STAG_StartListening.
 
 ### 5. Track progess
-Need to update the model's progress? Simply assign a new stage — you can upgrade or downgrade at any time.
+Show current stage distribution in a pie chart.
 
 ---
 
