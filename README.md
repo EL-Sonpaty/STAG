@@ -9,6 +9,9 @@ Track the lifecycle of elements — from **Design ➜ Production ➜ Fabrication
 - Object Attributes  
 - User Object Attributes
 
+DISCLAIMER : STAG was born and build over two days at the AEC Tech+ Hackathon. As such, it's not final product and is only provided here as a POC. 
+Some command might not work entirely as expected and can lead to loss of data or freeze rhino. Save your model before using STAG.
+
 ---
 
 ## 🚀 Features
@@ -22,16 +25,15 @@ Track the lifecycle of elements — from **Design ➜ Production ➜ Fabrication
 
 ## 🛠️ Installation Guide
 
-1. **Download the latest STAG plugin (.rhp)** from [Releases](https://github.com/your-org/STAG/releases)
-2. Open Rhino (v7 or v8)
-3. Drag & drop the `.rhp` file into Rhino, or use the `PluginManager`:
-   - Run `_PluginManager`
-   - Click `Install`
-   - Select the `.rhp` file
-4. Run the command `STAG` in Rhino to open the plugin panel
+True to it's "Hackathon born" origin, STAG is only available as a VS solution for now. 
+You can download and build the solution for yourself in 'Debug' mode. And run it with the "Rhino 8 - netcore" Configuration. 
 
-> ℹ️ No admin rights needed. All stage data is saved directly in the Rhino model.
+## 🦺 Requirements 
 
+- only support Windows.
+- Requires a valid Rhino license (to run Rhino).
+- Build on Rhino 8 SR20 (8.20.25157.13001, 2025-06-06). Not tested on previous Rhino versions.
+  
 ---
 
 ## 🧪 Quick Start Tutorial
@@ -42,19 +44,25 @@ The panel loads automatically. You can also access it via the Rhino `Panels` too
 ### 2. Create Stages  
 Click `Add New Stage` — define stages like **Design**, **Production**, or **Fabrication**.  
 Each stage includes constraints such as:
-- Allow move
-- Allow transform
-- Allow attribute edits
-- Allow user object attribute edits
+- Allow Geometrical changes (Trim, Boolean Operations, etc).
+- Allow Transformations (Move, Rotate, Scale)
+- Allow attribute edits (Name, Color) --> In developement. 
+- Allow user object attribute edits (User Text) --> In development.
 
 ### 3. Assign Stage to Geometry  
-Select one or more objects in Rhino and assign a stage from the panel. All selected elements will receive the same stage metadata.
+* Set default stage to all Rhino object without a stage already.
+* Upgrade selected objects (assign the next stage).
+* Downgrade selected objects (assign the previous stage).
 
 ### 4. Enforce Restrictions  
 Try moving, transforming, or editing object/user attributes — if the current stage disallows it, STAG will **block the action and roll it back** in Rhino.  
-> Yup, we actually implemented rollbacks! 🎯
 
-### 5. Change Stage  
+--> Important note : 
+STAG is listening to every changes in the model which can sometime leads to long update loops (as in "endless"). The "restriction" feature isn't very mature yet and require to listen constantly to every rhino event. 
+(note for self : best workaround would probably be to disable the "Allow Geometrical changes" change for now as this is bound to the ReplaceObject event in Rhino which is basically called everytime. Investigate if the Allow attribute edits is triggered by Hide/Show). 
+This being said, you can disable the listening with the command STAG_StopListening and enable it with STAG_StartListening.
+
+### 5. Track progess
 Need to update the model's progress? Simply assign a new stage — you can upgrade or downgrade at any time.
 
 ---
