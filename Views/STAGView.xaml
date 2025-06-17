@@ -15,7 +15,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
@@ -26,7 +26,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5">
+        <Border Grid.Row="0"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5" >
             <ListBox x:Name="ReportListBox" 
                      ItemsSource="{Binding StageConstraints}" 
                      SelectedItem="{Binding SelectedStage, Mode=TwoWay}"
@@ -59,20 +59,17 @@
             </ListBox>
         </Border>
 
-        <Border Grid.Row="2"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5">
+        <Border Grid.Row="2"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5" >
 
 
-            <Grid Margin="5 5">
+            <Grid Margin="5 5" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
+
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -166,7 +163,7 @@
 
                 <Border Grid.Row="1"  CornerRadius="6" BorderThickness="1" Background="White" Margin="5">
                     <ListBox x:Name="EditListBox"
-                             MaxHeight="293"
+                             MaxHeight="500"
                              BorderThickness="0"
                              BorderBrush="LightGray"
                              Background="Transparent"
