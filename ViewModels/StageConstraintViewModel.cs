@@ -14,7 +14,24 @@ namespace STAG.ViewModels
 
         public StageConstraintViewModel()
         {
-            StageColor = pastelBrushes[new Random().Next(pastelBrushes.Count)];
+            // pick a new color 
+            var color = pastelBrushes[new Random().Next(pastelBrushes.Count)];
+            // make sure this color is not already used in the STAGPanelViewModel.StageConstraint
+            // add a counter to use the color anyway after 5 tries
+            int attempts = 0;
+            if (STAGPlugin.Instance != null && STAGPlugin.Instance.STAGPanelViewModel != null)
+            {
+                if (STAGPlugin.Instance.STAGPanelViewModel.StageConstraints != null ||
+                    STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.Count != 0)
+                {
+                    while (attempts < 5 && STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.Any(s => s.StageColor == color))
+                    {
+                        color = pastelBrushes[new Random().Next(pastelBrushes.Count)];
+                        attempts++;
+                    }
+                }
+            }
+            StageColor = color;
         }
         public int Index => STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.IndexOf(this);
 

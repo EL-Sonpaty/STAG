@@ -26,9 +26,12 @@ namespace STAG.ViewModels
             Rhino.UI.Panels.Show += OnShowPanel;
             StageConstraints = new ObservableCollection<ViewModels.StageConstraintViewModel>
             {
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 1" },
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 2" },
-                new ViewModels.StageConstraintViewModel { StageName = "Stage 3" }
+                new ViewModels.StageConstraintViewModel { StageName = "Context" },
+                new ViewModels.StageConstraintViewModel { StageName = "Concept" },
+                new ViewModels.StageConstraintViewModel { StageName = "Base" },
+                new ViewModels.StageConstraintViewModel { StageName = "Detail" },
+                new ViewModels.StageConstraintViewModel { StageName = "Production" },
+                new ViewModels.StageConstraintViewModel { StageName = "Shipping" }
             };
         }
 
@@ -153,25 +156,28 @@ namespace STAG.ViewModels
         private void ShowGraph()
         {
 
-            var count = STAG_Core.CountObjectsByStages();
+            Views.PieChart pieChart = new Views.PieChart();
+            pieChart.Show();
 
-            // Display the count nicely as a text 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Current Stage Counts:");
-            foreach (var kvp in count)
-            {
-                if(kvp.Value == 1)
-                {
-                    sb.AppendLine($"- {kvp.Key} : {kvp.Value} Object");
-                }
-                else
-                {
-                    sb.AppendLine($"- {kvp.Key} : {kvp.Value} Objects");
-                }
-            }
+            //var count = STAG_Core.CountObjectsByStages();
+
+            //// Display the count nicely as a text 
+            //StringBuilder sb = new StringBuilder();
+            //sb.AppendLine("Current Stage Counts:");
+            //foreach (var kvp in count)
+            //{
+            //    if(kvp.Value == 1)
+            //    {
+            //        sb.AppendLine($"- {kvp.Key} : {kvp.Value} Object");
+            //    }
+            //    else
+            //    {
+            //        sb.AppendLine($"- {kvp.Key} : {kvp.Value} Objects");
+            //    }
+            //}
 
             //Add a window message Box
-            System.Windows.MessageBox.Show(sb.ToString(), "The graphs are not implemented yet", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            //System.Windows.MessageBox.Show(sb.ToString(), "The graphs are not implemented yet", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
 
 
         }
