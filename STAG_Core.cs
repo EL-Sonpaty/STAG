@@ -122,8 +122,8 @@ namespace STAG
                     RhinoApp.WriteLine($"Object {id} is already at highest stage or not recognized.");
                     return;
                 }
-                Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
             }
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
         public static void DowngradeStage(List<Guid> rhinoIds)
         {
@@ -150,6 +150,8 @@ namespace STAG
                     return;
                 }
             }
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
+
         }
 
         public static void SelectObjectsForStage(string stageName)
