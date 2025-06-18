@@ -15,7 +15,7 @@ namespace STAG.ViewModels
         public StageConstraintViewModel()
         {
             // pick a new color 
-            var color = pastelBrushes[new Random().Next(pastelBrushes.Count)];
+            var color = GetRandomColor();
             // make sure this color is not already used in the STAGPanelViewModel.StageConstraint
             // add a counter to use the color anyway after 5 tries
             int attempts = 0;
@@ -32,6 +32,16 @@ namespace STAG.ViewModels
                 }
             }
             StageColor = color;
+        }
+
+        public static Brush GetRandomColor()
+        {
+            return pastelBrushes[new Random().Next(pastelBrushes.Count)];
+        }
+
+        public void ResetColor()
+        {
+            StageColor = GetRandomColor();
         }
         public int Index => STAGPlugin.Instance.STAGPanelViewModel.StageConstraints.IndexOf(this);
 
@@ -91,12 +101,20 @@ namespace STAG.ViewModels
             }
         }
 
-        public Brush StageColor { get; private set; }
+        private Brush _color;
+        public Brush StageColor
+        {
+            get => _color;
+            private set
+            {
+                SetProperty(value, ref _color, nameof(StageColor));
+            }
+        }
 
 
 
 
-        List<Brush> pastelBrushes = new List<Brush>
+        public static List<Brush> pastelBrushes = new List<Brush>
         {
         new SolidColorBrush(Color.FromRgb(0xB6, 0xD7, 0xFF)), // Powder Blue
         new SolidColorBrush(Color.FromRgb(0xE6, 0xE6, 0xFA)), // Lavender Mist

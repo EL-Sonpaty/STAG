@@ -152,6 +152,16 @@ namespace STAG.ViewModels
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
 
+        public ICommand ResetColorsCommand => new RelayCommand(ResetColors);
+
+        public void ResetColors()
+        {
+            // get all stages 
+            foreach (var stage in StageConstraints)
+            {
+                stage.ResetColor();
+            }
+        }
         public ICommand ShowGraphCommand => new RelayCommand(ShowGraph);
         private void ShowGraph()
         {
@@ -233,6 +243,12 @@ namespace STAG.ViewModels
             {
                 StageConstraints.Move(index, index + 1);
             }
+        }
+
+        public ICommand ResetStageColorCommand => new RelayCommand<ViewModels.StageConstraintViewModel>(ResetStageColor);
+        public void ResetStageColor(ViewModels.StageConstraintViewModel stage)
+        {
+            stage.ResetColor();
         }
 
         public ObservableCollection<ViewModels.StageConstraintViewModel> StageConstraints { get; set; }

@@ -158,6 +158,9 @@
                     <Button  Command="{Binding AddNewStageCommand}" Width="25" Height="25">
                         <fas:IconBlock Icon="Plus" Foreground="Black"/>
                     </Button>
+                    <Button Command="{Binding ResetColorsCommand}" Width="25" Height="25" Margin="2 0 0 0">
+                        <fas:IconBlock Icon="Refresh" Foreground="Black"/>
+                    </Button>
                 </StackPanel>
 
 
@@ -177,8 +180,7 @@
                                 <StackPanel Orientation="Vertical" Margin="0 5 0 0">
                                     <StackPanel Orientation="Horizontal" Margin="5">
                                         <Border Width="32" Height="25" CornerRadius="6 0 0 6" Background="{Binding StageColor}" 
-                                                                                            BorderBrush="Gray" BorderThickness="1"
-/>
+                                                                                            BorderBrush="Gray" BorderThickness="1"/>
                                         <Border CornerRadius="0 6 6 0"
                                             BorderBrush="Gray"
                                             BorderThickness="1"
@@ -206,6 +208,10 @@
                                         <Button Command="{Binding DataContext.RemoveStageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                     CommandParameter="{Binding}" Width="25" Height="25" Margin="2 0">
                                             <fas:IconBlock Icon="Minus" Foreground="Black"/>
+                                        </Button>
+                                        <Button Command="{Binding DataContext.ResetStageColorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                    CommandParameter="{Binding}" Width="25" Height="25" Margin="2 0">
+                                            <fas:IconBlock Icon="Refresh" Foreground="Black"/>
                                         </Button>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="5 0">
