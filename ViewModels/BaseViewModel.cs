@@ -11,6 +11,5 @@ namespace STAG.ViewModels
     public class BaseViewModel : Rhino.UI.ViewModel
     {
         // no need afterall 
-
     }
 }
